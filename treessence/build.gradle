@@ -43,7 +43,7 @@ android {
     compileSdkVersion 26
 
     defaultConfig {
-        minSdkVersion 17
+        minSdkVersion 9
         targetSdkVersion 26
         versionCode versioning.info.versionCode
         versionName versioning.info.display
@@ -71,8 +71,8 @@ String support = "26.1.0"
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation "com.android.support:appcompat-v7:$support"
     implementation 'com.jakewharton.timber:timber:4.6.0'
+    implementation "com.android.support:support-annotations:$support"
 
     compileOnly('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
         transitive = true

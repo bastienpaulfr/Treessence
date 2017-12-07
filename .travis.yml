@@ -1,0 +1,30 @@
+language: android
+
+android:
+  components:
+    - tools
+    - platform-tools
+    - extra-android-support
+    - extra-android-m2repository
+
+jdk:
+  - oraclejdk8
+
+branches:
+  except:
+    - gh-pages
+
+before_install:
+  - mkdir "$ANDROID_HOME/licenses" || true
+  - echo -e "\n8933bad161af4178b1185d1a37fbf41ea5269c55\nd56f5187479451eabf01fb78af6dfcb131a6481e" > "$ANDROID_HOME/licenses/android-sdk-license"
+
+licenses:
+  - android-sdk-license-.+
+  - '.+'
+
+script:
+    ./gradlew clean build
+
+cache:
+  directories:
+    - $HOME/.m2
