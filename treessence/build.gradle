@@ -9,16 +9,34 @@ buildscript {
 }
 
 plugins {
+    id "com.jfrog.bintray" version "1.7.3"
     id "fr.coppernic.versioning" version "3.1.2"
 }
 
 apply plugin: 'com.android.library'
 apply plugin: 'io.fabric'
+apply plugin: 'checkstyle'
 
 repositories {
     google()
     jcenter()
     maven { url 'https://maven.fabric.io/public' }
+}
+
+task checkstyle(type: Checkstyle) {
+    configFile rootProject.file('config/checkstyle.xml')
+    source 'src/main/java'
+    ignoreFailures false
+    showViolations true
+    include '**/*.java'
+
+    classpath = files()
+}
+
+afterEvaluate {
+    if (project.tasks.findByName('check')) {
+        check.dependsOn('checkstyle')
+    }
 }
 
 android {
@@ -27,8 +45,8 @@ android {
     defaultConfig {
         minSdkVersion 17
         targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
+        versionCode versioning.info.versionCode
+        versionName versioning.info.display
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -72,3 +90,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 }
+
+apply from: rootProject.file('gradle/gradle-publish.gradle')

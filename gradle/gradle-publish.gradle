@@ -1,0 +1,131 @@
+apply plugin: 'maven-publish'
+
+String v = "$project.versioning.info.display"
+String t = "$project.versioning.info.tag"
+
+task androidJavadocs(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+
+    if (JavaVersion.current().isJava8Compatible()) {
+        allprojects {
+            tasks.withType(Javadoc) {
+                options.addStringOption('Xdoclint:none', '-quiet')
+            }
+        }
+    }
+}
+
+task androidJavadocsJar(type: Jar, dependsOn: androidJavadocs) {
+    classifier = 'javadoc'
+    from androidJavadocs.destinationDir
+}
+
+task androidSourcesJar(type: Jar) {
+    classifier = 'sources'
+    from android.sourceSets.main.java.sourceFiles
+}
+
+def pomConfig = {
+    licenses {
+        license {
+            name POM_LICENCE_NAME
+            url POM_LICENCE_URL
+            distribution POM_LICENCE_DIST
+        }
+    }
+    developers {
+        developer {
+            id POM_DEVELOPER_ID
+            name POM_DEVELOPER_NAME
+        }
+    }
+    scm {
+        url POM_SCM_URL
+        connection POM_SCM_CONNECTION
+    }
+}
+
+publishing {
+    publications {
+        art(MavenPublication) {
+            groupId GROUP
+            artifactId "$project.name"
+            version versioning.info.display
+
+            android.libraryVariants.all { variant ->
+                if(variant.buildType.name == "release") {
+                    variant.outputs.all {
+                        logger.info "Artifact : ${it.outputFile}"
+                        artifact(it.outputFile)
+                    }
+                }
+            }
+
+            artifact androidSourcesJar
+            artifact androidJavadocsJar
+
+            // Customize pom with dependencies
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', POM_DESCRIPTION)
+                root.appendNode('name', rootProject.name)
+                root.appendNode('url', POM_URL)
+                root.children().last() + pomConfig
+                def dependenciesNode = root.appendNode('dependencies')
+
+                project.configurations.implementation.allDependencies.each {
+                    if (it instanceof ExternalModuleDependency
+                            && it.group != null
+                            && it.name != null) {
+
+                        logger.info "dependency : ${it}\nartifact : " +
+                                "${it.getArtifacts().collect { a -> "${a.name}, ${a.type}, ${a.url}, ${a.extension}, ${a.classifier}" }.join(', ')}"
+
+                        def dependencyNode = dependenciesNode.appendNode('dependency')
+                        dependencyNode.appendNode('groupId', it.group)
+                        dependencyNode.appendNode('artifactId', it.name)
+                        dependencyNode.appendNode('version', it.version)
+
+                        if(it.getArtifacts().size() > 0){
+                            dependencyNode.appendNode('type', it.getArtifacts()[0].type)
+                        }
+
+                        //If there are any exclusions in dependency
+                        if (it.excludeRules.size() > 0) {
+                            def exclusionsNode = dependencyNode.appendNode('exclusions')
+                            it.excludeRules.each { rule ->
+                                def exclusionNode = exclusionsNode.appendNode('exclusion')
+                                exclusionNode.appendNode('groupId', rule.group)
+                                exclusionNode.appendNode('artifactId', rule.module)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+bintray {
+    user = project.hasProperty("bintray_user")?project.bintray_user:""
+    key = project.hasProperty("bintray_key")?project.bintray_key:""
+    pkg {
+        repo = "maven"
+        name = rootProject.name
+        licenses = ["Apache-2.0"]
+        labels = ['Timber', 'Android', 'Log']
+        vcsUrl = POM_SCM_URL
+        websiteUrl = POM_URL
+        issueTrackerUrl = POM_ISSUES_URL
+        githubRepo = GITHUB_REPO //Optional Github repository
+        githubReleaseNotesFile = GITHUB_README //Optional Github readme file
+        version {
+            name = v
+            desc = POM_DESCRIPTION
+            released = new Date()
+            vcsTag = t
+        }
+    }
+    publications = ['art']
+}
