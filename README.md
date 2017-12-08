@@ -10,10 +10,15 @@ Some trees for Timber lib
 ```
 repositories {
     jcenter()
+    maven { url "https://dl.bintray.com/bastienpaulfr/maven" }
 }
 
 dependencies {
-    implementation 'fr.bipi.treessence:treessence:0.0.1'
+    //Treessence does not include Timber
+    implementation 'com.jakewharton.timber:timber:4.6.0'
+    implementation('fr.bipi.treessence:treessence:0.0.1') {
+        exclude group: 'com.android.support'
+    }
 }
 ```
 
