@@ -15,7 +15,7 @@
  */
 package fr.bipi.tressence.base;
 
-import android.support.annotation.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import fr.bipi.tressence.formatter.DefaultLogFormatter;
 import fr.bipi.tressence.formatter.Formatter;
@@ -24,7 +24,7 @@ import fr.bipi.tressence.formatter.Formatter;
  * Base class to filter logs by priority
  */
 public abstract class FormatterPriorityTree extends PriorityTree {
-    private Formatter formatter = new DefaultLogFormatter();
+    private Formatter formatter = getDefaultFormatter();
 
     protected FormatterPriorityTree(int priority) {
         super(priority);
@@ -49,7 +49,14 @@ public abstract class FormatterPriorityTree extends PriorityTree {
      * @param message  Message
      * @return Formatted log
      */
-    protected String format(int priority, String tag, @NonNull String message) {
+    protected String format(int priority, String tag, @NotNull String message) {
         return formatter.format(priority, tag, message);
+    }
+
+    /**
+     * @return Default log {@link Formatter}
+     */
+    protected Formatter getDefaultFormatter() {
+        return new DefaultLogFormatter();
     }
 }

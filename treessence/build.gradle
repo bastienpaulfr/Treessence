@@ -66,15 +66,13 @@ android {
     }
 }
 
-String support = "26.1.0"
-
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
     implementation 'com.jakewharton.timber:timber:4.6.0'
-    implementation "com.android.support:support-annotations:$support"
 
-    compileOnly('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
+    compileOnly 'org.jetbrains:annotations:15.0'
+    compileOnly('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
         transitive = true
     }
 
@@ -82,8 +80,8 @@ dependencies {
     testImplementation 'org.mockito:mockito-core:2.7.14'
     testImplementation "org.robolectric:robolectric:3.5"
     testImplementation "org.awaitility:awaitility:3.0.0"
-    testImplementation "org.hamcrest:hamcrest-library:1.3"
-    testImplementation('com.crashlytics.sdk.android:crashlytics:2.6.6@aar') {
+    testImplementation "org.hamcrest:java-hamcrest:2.0.0.0"
+    testImplementation('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
         transitive = true
     }
 

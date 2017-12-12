@@ -15,7 +15,7 @@
  */
 package fr.bipi.tressence.base;
 
-import android.support.annotation.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import fr.bipi.tressence.common.Filter;
 import fr.bipi.tressence.common.NoFilter;
@@ -25,7 +25,7 @@ import timber.log.Timber;
 /**
  * Base class to filter logs by priority
  */
-public abstract class PriorityTree extends Timber.Tree {
+public abstract class PriorityTree extends Timber.DebugTree {
 
     private final PriorityFilter priorityFilter;
     private Filter filter = NoFilter.INSTANCE;
@@ -43,7 +43,7 @@ public abstract class PriorityTree extends Timber.Tree {
      * @param f Filter
      * @return itself
      */
-    public PriorityTree withFilter(@NonNull Filter f) {
+    public PriorityTree withFilter(@NotNull Filter f) {
         this.filter = f;
         return this;
     }
@@ -75,7 +75,7 @@ public abstract class PriorityTree extends Timber.Tree {
      * @param t        Log throwable
      * @return true if needed to be skipped or false
      */
-    protected boolean skipLog(int priority, String tag, @NonNull String message, Throwable t) {
+    protected boolean skipLog(int priority, String tag, @NotNull String message, Throwable t) {
         return filter.skipLog(priority, tag, message, t);
     }
 }

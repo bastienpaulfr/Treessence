@@ -15,8 +15,9 @@
  */
 package fr.bipi.tressence.console;
 
-import android.support.annotation.NonNull;
 import android.util.Log;
+
+import org.jetbrains.annotations.NotNull;
 
 import fr.bipi.tressence.base.PriorityTree;
 import timber.log.Timber;
@@ -41,7 +42,7 @@ public class ThrowErrorTree extends PriorityTree {
     }
 
     @Override
-    protected void log(int priority, String tag, @NonNull String message, Throwable t) {
+    protected void log(int priority, String tag, @NotNull String message, Throwable t) {
         if (skipLog(priority, tag, message, t)) {
             return;
         }

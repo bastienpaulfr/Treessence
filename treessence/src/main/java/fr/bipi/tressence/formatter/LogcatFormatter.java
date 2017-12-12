@@ -15,22 +15,29 @@
  */
 package fr.bipi.tressence.formatter;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
-import android.util.SparseArray;
 
 import org.jetbrains.annotations.NotNull;
 
-public class DefaultLogFormatter implements Formatter {
+import java.util.HashMap;
 
-    private final SparseArray<String> prioPrefixes = new SparseArray<>();
+import fr.bipi.tressence.utils.TimeUtils;
 
-    public DefaultLogFormatter() {
-        prioPrefixes.append(Log.VERBOSE, "V/");
-        prioPrefixes.append(Log.DEBUG, "D/");
-        prioPrefixes.append(Log.INFO, "I/");
-        prioPrefixes.append(Log.WARN, "W/");
-        prioPrefixes.append(Log.ERROR, "E/");
-        prioPrefixes.append(Log.ASSERT, "WTF/");
+public class LogcatFormatter implements Formatter {
+
+    private static final String SEP = " ";
+
+    @SuppressLint("UseSparseArrays")
+    private final HashMap<Integer, String> prioPrefixes = new HashMap<>();
+
+    public LogcatFormatter() {
+        prioPrefixes.put(Log.VERBOSE, "V/");
+        prioPrefixes.put(Log.DEBUG, "D/");
+        prioPrefixes.put(Log.INFO, "I/");
+        prioPrefixes.put(Log.WARN, "W/");
+        prioPrefixes.put(Log.ERROR, "E/");
+        prioPrefixes.put(Log.ASSERT, "WTF/");
     }
 
     @Override
@@ -39,6 +46,13 @@ public class DefaultLogFormatter implements Formatter {
         if (prio == null) {
             prio = "";
         }
-        return prio + (tag == null ? "" : tag + " : ") + message;
+        return TimeUtils.timestampToDate(System.currentTimeMillis(), "MM-dd HH:mm:ss:SSS")
+               + SEP
+               + prio
+               + (tag == null ? "" : tag)
+               + "(" + Thread.currentThread().getId() + ") :"
+               + SEP
+               + message
+               + "\n";
     }
 }
