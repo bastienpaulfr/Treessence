@@ -7,6 +7,6 @@ import timber.log.Timber;
 public class NoTree extends Timber.Tree {
     @Override
     protected void log(int priority, String tag, @NotNull String message, Throwable t) {
-
+        // Nothing to do
     }
 }

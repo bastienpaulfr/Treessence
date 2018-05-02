@@ -15,7 +15,7 @@ public class DefaultLogFormatterTest extends RobolectricTest{
 
     @Before
     public void before(){
-        defaultLogFormatter = new DefaultLogFormatter();
+        defaultLogFormatter = DefaultLogFormatter.INSTANCE;
     }
 
     @Test

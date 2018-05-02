@@ -25,7 +25,7 @@ public class SystemLogTree extends FormatterPriorityTree {
 
     @Override
     protected Formatter getDefaultFormatter() {
-        return new LogcatFormatter();
+        return LogcatFormatter.INSTANCE;
     }
 
     @Override

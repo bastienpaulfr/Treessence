@@ -26,12 +26,13 @@ import fr.bipi.tressence.utils.TimeUtils;
 
 public class LogcatFormatter implements Formatter {
 
+    public static final LogcatFormatter INSTANCE = new LogcatFormatter();
     private static final String SEP = " ";
 
     @SuppressLint("UseSparseArrays")
     private final HashMap<Integer, String> prioPrefixes = new HashMap<>();
 
-    public LogcatFormatter() {
+    private LogcatFormatter() {
         prioPrefixes.put(Log.VERBOSE, "V/");
         prioPrefixes.put(Log.DEBUG, "D/");
         prioPrefixes.put(Log.INFO, "I/");

@@ -63,7 +63,7 @@ public class FileLoggerTree extends FormatterPriorityTree {
 
     @Override
     protected fr.bipi.tressence.formatter.Formatter getDefaultFormatter() {
-        return new LogcatFormatter();
+        return LogcatFormatter.INSTANCE;
     }
 
     /**

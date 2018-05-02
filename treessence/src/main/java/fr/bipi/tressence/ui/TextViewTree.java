@@ -30,7 +30,7 @@ public class TextViewTree extends FormatterPriorityTree {
 
     @Override
     protected Formatter getDefaultFormatter() {
-        return new NoTagFormatter();
+        return NoTagFormatter.INSTANCE;
     }
 
     @Override

@@ -57,6 +57,6 @@ public abstract class FormatterPriorityTree extends PriorityTree {
      * @return Default log {@link Formatter}
      */
     protected Formatter getDefaultFormatter() {
-        return new DefaultLogFormatter();
+        return DefaultLogFormatter.INSTANCE;
     }
 }
