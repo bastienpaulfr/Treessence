@@ -9,17 +9,17 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 
-public class DefaultLogFormatterTest extends RobolectricTest{
+public class DefaultLogFormatterTest extends RobolectricTest {
 
     private DefaultLogFormatter defaultLogFormatter;
 
     @Before
-    public void before(){
+    public void before() {
         defaultLogFormatter = DefaultLogFormatter.INSTANCE;
     }
 
     @Test
-    public void test(){
+    public void test() {
         assertThat(defaultLogFormatter.format(1, "tag", "message"),
                    is("tag : message"));
         assertThat(defaultLogFormatter.format(2, "tag", "message"),

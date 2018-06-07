@@ -25,7 +25,7 @@ import timber.log.Timber;
 /**
  * Base class to filter logs by priority
  */
-public abstract class PriorityTree extends Timber.DebugTree {
+public class PriorityTree extends Timber.DebugTree {
 
     private final PriorityFilter priorityFilter;
     private Filter filter = NoFilter.INSTANCE;
@@ -33,7 +33,7 @@ public abstract class PriorityTree extends Timber.DebugTree {
     /**
      * @param priority priority from witch log will be logged
      */
-    protected PriorityTree(int priority) {
+    public PriorityTree(int priority) {
         this.priorityFilter = new PriorityFilter(priority);
     }
 

@@ -8,7 +8,7 @@ import static org.junit.Assert.assertThat;
 public class PriorityFilterTest {
 
     @Test
-    public void test(){
+    public void test() {
         PriorityFilter filter = new PriorityFilter(3);
         assertThat(filter.getMinPriority(), is(3));
         assertThat(filter.isLoggable(3, ""), is(true));

@@ -1,16 +1,21 @@
 package fr.bipi.tressence.robolectric;
 
+import android.util.Log;
+
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowLog;
 
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import fr.bipi.tressence.BuildConfig;
 
 import static org.awaitility.Awaitility.await;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.assertTrue;
 
 
@@ -20,7 +25,7 @@ import static org.junit.Assert.assertTrue;
  * Robolectric tests are done in a single thread !
  */
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 21)
+@Config(constants = BuildConfig.class, sdk = 21, manifest = Config.NONE)
 public abstract class RobolectricTest {
 
     private AtomicBoolean unblock = new AtomicBoolean(false);
@@ -29,6 +34,10 @@ public abstract class RobolectricTest {
     public static void beforeClass() {
         //Configure robolectric
         ShadowLog.stream = System.out;
+    }
+
+    public static LogAssert assertLog() {
+        return new LogAssert(ShadowLog.getLogs());
     }
 
     public void sleep(long ms) {
@@ -52,4 +61,48 @@ public abstract class RobolectricTest {
         assertTrue(false);
     }
 
+    public static final class LogAssert {
+        private final List<ShadowLog.LogItem> items;
+        private int index = 0;
+
+        private LogAssert(List<ShadowLog.LogItem> items) {
+            this.items = items;
+        }
+
+        public LogAssert hasVerboseMessage(String tag, String message) {
+            return hasMessage(Log.VERBOSE, tag, message);
+        }
+
+        public LogAssert hasDebugMessage(String tag, String message) {
+            return hasMessage(Log.DEBUG, tag, message);
+        }
+
+        public LogAssert hasInfoMessage(String tag, String message) {
+            return hasMessage(Log.INFO, tag, message);
+        }
+
+        public LogAssert hasWarnMessage(String tag, String message) {
+            return hasMessage(Log.WARN, tag, message);
+        }
+
+        public LogAssert hasErrorMessage(String tag, String message) {
+            return hasMessage(Log.ERROR, tag, message);
+        }
+
+        public LogAssert hasAssertMessage(String tag, String message) {
+            return hasMessage(Log.ASSERT, tag, message);
+        }
+
+        private LogAssert hasMessage(int priority, String tag, String message) {
+            ShadowLog.LogItem item = items.get(index++);
+            assertThat(item.type, is(priority));
+            assertThat(item.tag, is(tag));
+            assertThat(item.msg, is(message));
+            return this;
+        }
+
+        public void hasNoMoreMessages() {
+            assertThat(items.size(), is(index));
+        }
+    }
 }

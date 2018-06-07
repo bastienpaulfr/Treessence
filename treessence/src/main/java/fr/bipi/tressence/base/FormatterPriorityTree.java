@@ -17,16 +17,16 @@ package fr.bipi.tressence.base;
 
 import org.jetbrains.annotations.NotNull;
 
-import fr.bipi.tressence.formatter.DefaultLogFormatter;
 import fr.bipi.tressence.formatter.Formatter;
+import fr.bipi.tressence.formatter.NoTagFormatter;
 
 /**
  * Base class to filter logs by priority
  */
-public abstract class FormatterPriorityTree extends PriorityTree {
+public class FormatterPriorityTree extends PriorityTree {
     private Formatter formatter = getDefaultFormatter();
 
-    protected FormatterPriorityTree(int priority) {
+    public FormatterPriorityTree(int priority) {
         super(priority);
     }
 
@@ -57,6 +57,11 @@ public abstract class FormatterPriorityTree extends PriorityTree {
      * @return Default log {@link Formatter}
      */
     protected Formatter getDefaultFormatter() {
-        return DefaultLogFormatter.INSTANCE;
+        return NoTagFormatter.INSTANCE;
+    }
+
+    @Override
+    protected void log(int priority, String tag, @NotNull String message, Throwable t) {
+        super.log(priority, tag, format(priority, tag, message), t);
     }
 }
