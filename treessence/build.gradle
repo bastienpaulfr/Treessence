@@ -4,7 +4,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.25.4'
+        classpath 'io.fabric.tools:gradle:1.26.1'
     }
 }
 
@@ -40,11 +40,11 @@ afterEvaluate {
 }
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 28
 
     defaultConfig {
-        minSdkVersion 9
-        targetSdkVersion 26
+        minSdkVersion 17
+        targetSdkVersion 28
         versionCode versioning.info.versionCode
         versionName versioning.info.display
 
@@ -72,21 +72,17 @@ dependencies {
     implementation 'com.jakewharton.timber:timber:4.7.0'
 
     compileOnly 'org.jetbrains:annotations:15.0'
-    compileOnly group: 'org.slf4j', name: 'slf4j-android', version: '1.7.25'
-    compileOnly 'io.sentry:sentry-android:1.7.2'
-    compileOnly('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
-        transitive = true
-    }
+    compileOnly 'org.slf4j:slf4j-android:1.7.25'
+    compileOnly 'io.sentry:sentry-android:1.7.10'
+    compileOnly 'com.crashlytics.sdk.android:crashlytics:2.9.5'
 
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.mockito:mockito-core:2.15.0'
-    testImplementation "org.robolectric:robolectric:3.5"
+    testImplementation "org.robolectric:robolectric:3.8"
     testImplementation "org.awaitility:awaitility:3.0.0"
     testImplementation "org.hamcrest:java-hamcrest:2.0.0.0"
-    testImplementation('com.crashlytics.sdk.android:crashlytics:2.8.0@aar') {
-        transitive = true
-    }
-
+    testImplementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
+    
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
