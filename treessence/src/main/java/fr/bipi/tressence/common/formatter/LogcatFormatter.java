@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.bipi.tressence.formatter;
+package fr.bipi.tressence.common.formatter;
 
 import android.annotation.SuppressLint;
 import android.util.Log;
@@ -22,7 +22,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
-import fr.bipi.tressence.utils.TimeUtils;
+import fr.bipi.tressence.common.utils.TimeUtils;
 
 public class LogcatFormatter implements Formatter {
 

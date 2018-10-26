@@ -17,8 +17,8 @@ package fr.bipi.tressence.base;
 
 import org.jetbrains.annotations.NotNull;
 
-import fr.bipi.tressence.formatter.Formatter;
-import fr.bipi.tressence.formatter.NoTagFormatter;
+import fr.bipi.tressence.common.formatter.Formatter;
+import fr.bipi.tressence.common.formatter.NoTagFormatter;
 
 /**
  * Base class to filter logs by priority

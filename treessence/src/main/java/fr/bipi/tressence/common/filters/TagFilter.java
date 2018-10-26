@@ -13,18 +13,27 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.bipi.tressence.common;
+package fr.bipi.tressence.common.filters;
 
-public class NoFilter implements Filter {
-    public static final Filter INSTANCE = new NoFilter();
+public class TagFilter implements Filter {
+
+    private final String tagRegex;
+
+    public TagFilter(String tagRegex) {
+        this.tagRegex = tagRegex;
+    }
 
     @Override
     public boolean skipLog(int priority, String tag, String message, Throwable t) {
-        return false;
+        return !tag.matches(tagRegex);
     }
 
     @Override
     public boolean isLoggable(int priority, String tag) {
-        return true;
+        return tag.matches(tagRegex);
+    }
+
+    public String getTagRegex() {
+        return tagRegex;
     }
 }

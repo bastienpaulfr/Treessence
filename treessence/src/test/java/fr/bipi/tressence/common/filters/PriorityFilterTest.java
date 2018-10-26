@@ -1,4 +1,4 @@
-package fr.bipi.tressence.common;
+package fr.bipi.tressence.common.filters;
 
 import org.junit.Test;
 

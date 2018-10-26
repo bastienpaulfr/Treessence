@@ -16,8 +16,8 @@ import java.util.logging.Logger;
 
 import fr.bipi.tressence.base.FormatterPriorityTree;
 import fr.bipi.tressence.base.NoTree;
-import fr.bipi.tressence.formatter.LogcatFormatter;
-import fr.bipi.tressence.utils.FileUtils;
+import fr.bipi.tressence.common.formatter.LogcatFormatter;
+import fr.bipi.tressence.common.utils.FileUtils;
 import timber.log.Timber;
 
 /**
@@ -62,7 +62,7 @@ public class FileLoggerTree extends FormatterPriorityTree {
     }
 
     @Override
-    protected fr.bipi.tressence.formatter.Formatter getDefaultFormatter() {
+    protected fr.bipi.tressence.common.formatter.Formatter getDefaultFormatter() {
         return LogcatFormatter.INSTANCE;
     }
 

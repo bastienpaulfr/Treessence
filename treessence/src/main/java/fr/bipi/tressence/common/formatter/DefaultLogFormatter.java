@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.bipi.tressence.formatter;
+package fr.bipi.tressence.common.formatter;
 
 import android.util.Log;
 import android.util.SparseArray;
@@ -41,6 +41,6 @@ public class DefaultLogFormatter implements Formatter {
         if (prio == null) {
             prio = "";
         }
-        return prio + (tag == null ? "" : tag + " : ") + message;
+        return prio + (tag == null ? "" : tag + " : ") + message + "\n";
     }
 }

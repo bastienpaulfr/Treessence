@@ -4,7 +4,7 @@ import android.util.Log;
 
 import org.junit.Test;
 
-import fr.bipi.tressence.formatter.Formatter;
+import fr.bipi.tressence.common.formatter.Formatter;
 import fr.bipi.tressence.robolectric.RobolectricTest;
 
 import static org.hamcrest.MatcherAssert.assertThat;

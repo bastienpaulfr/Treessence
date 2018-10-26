@@ -17,9 +17,9 @@ package fr.bipi.tressence.base;
 
 import org.jetbrains.annotations.NotNull;
 
-import fr.bipi.tressence.common.Filter;
-import fr.bipi.tressence.common.NoFilter;
-import fr.bipi.tressence.common.PriorityFilter;
+import fr.bipi.tressence.common.filters.Filter;
+import fr.bipi.tressence.common.filters.NoFilter;
+import fr.bipi.tressence.common.filters.PriorityFilter;
 import timber.log.Timber;
 
 /**

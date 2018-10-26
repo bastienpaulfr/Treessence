@@ -5,10 +5,10 @@ import android.util.Log;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
-import fr.bipi.tressence.base.PriorityTree;
+import fr.bipi.tressence.base.FormatterPriorityTree;
+import fr.bipi.tressence.common.formatter.DefaultLogFormatter;
+import fr.bipi.tressence.common.formatter.Formatter;
 import io.sentry.Sentry;
 import io.sentry.event.Breadcrumb;
 import io.sentry.event.BreadcrumbBuilder;
@@ -16,32 +16,20 @@ import io.sentry.event.BreadcrumbBuilder;
 /**
  * Logger that will store a Breadcrumb. Throwable are ignored.
  */
-public class SentryBreadcrumbTree extends PriorityTree {
+public class SentryBreadcrumbTree extends FormatterPriorityTree {
 
     private static final String KEY_TAG = "tag";
-    @NotNull
-    private Breadcrumb template;
 
     /**
      * @param priority priority from witch log will be logged
      */
     public SentryBreadcrumbTree(int priority) {
         super(priority);
-        setTemplate(makeDefaultEventTemplate());
     }
 
-    public void setTemplate(@NotNull Breadcrumb template) {
-        this.template = template;
-    }
-
-    public BreadcrumbBuilder getBreadcrumbBuilderFromLocalTemplate() {
-        BreadcrumbBuilder bb = new BreadcrumbBuilder();
-        bb.setType(template.getType())
-            .setData(template.getData())
-            .setLevel(template.getLevel())
-            .setMessage(template.getMessage())
-            .setCategory(template.getCategory());
-        return bb;
+    @Override
+    protected Formatter getDefaultFormatter() {
+        return DefaultLogFormatter.INSTANCE;
     }
 
     @Override
@@ -50,13 +38,11 @@ public class SentryBreadcrumbTree extends PriorityTree {
             return;
         }
 
-        Map<String, String> map = new HashMap<>();
-        map.put(KEY_TAG, tag);
-
-        BreadcrumbBuilder bb = getBreadcrumbBuilderFromLocalTemplate();
-        bb.setMessage(message)
+        BreadcrumbBuilder bb = new BreadcrumbBuilder();
+        bb.setMessage(format(priority, tag, message))
             .setTimestamp(new Date())
-            .setData(map)
+            .setCategory("log")
+            .setType(Breadcrumb.Type.DEFAULT)
             .setLevel(fromAndroidLogPriorityToSentryLevel(priority));
 
         Sentry.getContext().recordBreadcrumb(bb.build());
@@ -77,15 +63,5 @@ public class SentryBreadcrumbTree extends PriorityTree {
             default:
                 return Breadcrumb.Level.DEBUG;
         }
-    }
-
-    private Breadcrumb makeDefaultEventTemplate() {
-        return new BreadcrumbBuilder()
-            .setCategory("")
-            .setMessage("")
-            .setLevel(Breadcrumb.Level.DEBUG)
-            .setData(null)
-            .setType(Breadcrumb.Type.DEFAULT)
-            .build();
     }
 }

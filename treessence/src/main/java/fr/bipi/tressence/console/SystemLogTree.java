@@ -5,8 +5,8 @@ import android.util.Log;
 import org.jetbrains.annotations.NotNull;
 
 import fr.bipi.tressence.base.FormatterPriorityTree;
-import fr.bipi.tressence.formatter.Formatter;
-import fr.bipi.tressence.formatter.LogcatFormatter;
+import fr.bipi.tressence.common.formatter.Formatter;
+import fr.bipi.tressence.common.formatter.LogcatFormatter;
 import timber.log.Timber;
 
 

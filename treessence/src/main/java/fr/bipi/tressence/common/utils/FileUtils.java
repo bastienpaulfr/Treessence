@@ -1,4 +1,4 @@
-package fr.bipi.tressence.utils;
+package fr.bipi.tressence.common.utils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;

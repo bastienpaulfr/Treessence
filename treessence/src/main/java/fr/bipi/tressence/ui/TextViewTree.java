@@ -9,8 +9,8 @@ import org.jetbrains.annotations.NotNull;
 import java.lang.ref.WeakReference;
 
 import fr.bipi.tressence.base.FormatterPriorityTree;
-import fr.bipi.tressence.formatter.Formatter;
-import fr.bipi.tressence.formatter.NoTagFormatter;
+import fr.bipi.tressence.common.formatter.Formatter;
+import fr.bipi.tressence.common.formatter.NoTagFormatter;
 
 /**
  * An implementation of `Timber.Tree` which sends log into a text view

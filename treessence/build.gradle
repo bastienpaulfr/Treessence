@@ -82,7 +82,7 @@ dependencies {
     testImplementation "org.awaitility:awaitility:3.0.0"
     testImplementation "org.hamcrest:java-hamcrest:2.0.0.0"
     testImplementation 'com.crashlytics.sdk.android:crashlytics:2.9.5'
-    
+
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }

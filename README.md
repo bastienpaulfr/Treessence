@@ -17,7 +17,7 @@ repositories {
 dependencies {
     //Treessence does not include Timber
     implementation 'com.jakewharton.timber:timber:4.6.0'
-    implementation 'fr.bipi.treessence:treessence:0.1.0'
+    implementation 'fr.bipi.treessence:treessence:0.2.0'
 }
 ```
 
@@ -40,26 +40,12 @@ log is exceeded the limit. Useful for development or test environment.
 Timber.plant(new ThrowErrorTree(Log.ERROR));
 ```
 
-### Crash reporting
+#### SystemLogTree
 
-#### CrashlyticsLogTree
-
-An implementation of `Timber.Tree` which sends log to Crashlytics.
-
-You need to add crashlytics dependency to use this tree.
+An implementation of `Timber.Tree` which logs into `System.out`
 
 ```java
-// Send log to crashlytics for logs starting from warning
-Timber.plant(new CrashlyticsLogTree(Log.WARN));
-```
-
-#### CrashlyticsLogExceptionTree
-
-Same as above but use `Crashlytics.logException` instead of `Crashlytics.log()`
-
-```java
-// Send log to crashlytics for logs starting from warning
-Timber.plant(new CrashlyticsLogExceptionTree(Log.ERROR));
+Timber.plant(new SystemLogTree());
 ```
 
 ### File Logging
@@ -79,6 +65,58 @@ Tree t = new FileLoggerTree.Builder()
                      .appendToFile(true)
                      .build();
 Timber.plant(t);
+```
+
+### Crash reporting
+
+#### SentryBreadcrumbTree
+
+An implementation of `Timber.Tree` which stores breadcrumb to Sentry instance. Breadcrumbs are then sent with an event.
+
+You need to add sentry dependency to use this tree.
+
+```java
+Timber.plant(new SentryBreadcrumbTree(Log.DEBUG));
+```
+
+#### SentryEventTree
+
+An implementation of `Timber.Tree` which sends Sentry events. It is useful for sending errors or logs that are not coming so often.
+Otherwise your sentry instance will be flooded !
+
+You need to add sentry dependency to use this tree.
+
+```java
+Timber.plant(new SentryEventTree(Log.ERROR));
+```
+
+You can also add a filter for SentryEvent
+
+```java
+// This will send an event to Sentry only if priority exceeds "ERROR" level and class name starts with "Sentry"
+TagFilter filter = new TagFilter("Sentry.*");
+SentryEventTree tree = new SentryEventTree(Log.INFO).withFilter(TagFilter);
+Timber.plant(tree);
+```
+
+#### CrashlyticsLogTree
+
+An implementation of `Timber.Tree` which sends log to Crashlytics.
+
+You need to add crashlytics dependency to use this tree.
+
+```java
+// Send log to crashlytics for logs starting from warning
+Timber.plant(new CrashlyticsLogTree(Log.WARN));
+```
+
+#### CrashlyticsLogExceptionTree
+
+Same as above but use `Crashlytics.logException` instead of `Crashlytics.log()`
+
+```java
+// Send log to crashlytics for logs starting from warning
+Timber.plant(new CrashlyticsLogExceptionTree(Log.ERROR));
 ```
 
 ## Licence

@@ -13,19 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package fr.bipi.tressence.common;
+package fr.bipi.tressence.common.formatter;
 
-public interface Filter {
+public interface Formatter {
 
-    /**
-     * @param priority Log priority.
-     * @param tag      Tag for log.
-     * @param message  Formatted log message.
-     * @param t        Accompanying exceptions.
-     * @return {@code true} if the log should be skipped, otherwise {@code false}.
-     * @see timber.log.Timber.Tree#log(int, String, String, Throwable)
-     */
-    boolean skipLog(int priority, String tag, String message, Throwable t);
-
-    boolean isLoggable(int priority, String tag);
+    String format(int priority, String tag, String message);
 }

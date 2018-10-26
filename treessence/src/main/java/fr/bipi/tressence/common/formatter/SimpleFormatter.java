@@ -1,4 +1,4 @@
-package fr.bipi.tressence.formatter;
+package fr.bipi.tressence.common.formatter;
 
 public class SimpleFormatter implements Formatter {
 
@@ -9,6 +9,6 @@ public class SimpleFormatter implements Formatter {
 
     @Override
     public String format(int priority, String tag, String message) {
-        return tag + " : " + message;
+        return tag + " : " + message + "\n";
     }
 }

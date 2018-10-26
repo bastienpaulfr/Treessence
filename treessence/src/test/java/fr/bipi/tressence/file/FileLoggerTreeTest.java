@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import fr.bipi.tressence.utils.FileUtils;
+import fr.bipi.tressence.common.utils.FileUtils;
 import timber.log.Timber;
 
 import static org.hamcrest.MatcherAssert.assertThat;
