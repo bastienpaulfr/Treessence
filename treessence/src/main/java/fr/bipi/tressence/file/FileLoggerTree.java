@@ -131,6 +131,7 @@ public class FileLoggerTree extends FormatterPriorityTree {
         }
     }
 
+    @SuppressWarnings("WeakerAccess")
     public static class Builder {
         private static final int SIZE_LIMIT = 1048576;
         private static final int NB_FILE_LIMIT = 3;
@@ -162,6 +163,17 @@ public class FileLoggerTree extends FormatterPriorityTree {
          */
         public Builder withDirName(String dn) {
             this.dir = dn;
+            return this;
+        }
+
+        /**
+         * Specify a custom dir name
+         *
+         * @param d Dir file
+         * @return itself
+         */
+        public Builder withDir(File d) {
+            this.dir = d.getAbsolutePath();
             return this;
         }
 
@@ -218,7 +230,7 @@ public class FileLoggerTree extends FormatterPriorityTree {
          * @return {@link FileLoggerTree} or {@link NoTree} if an exception occurred
          */
         @NotNull
-        Timber.Tree build() {
+        public Timber.Tree build() {
             Timber.Tree tree;
             String path = FileUtils.combinePath(dir, fileName);
 
