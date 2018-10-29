@@ -128,4 +128,5 @@ bintray {
         }
     }
     publications = ['art']
+    publish = true
 }
