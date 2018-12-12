@@ -15,25 +15,40 @@
  */
 package fr.bipi.tressence.common.filters;
 
+import java.util.regex.Pattern;
+
 public class TagFilter implements Filter {
 
     private final String tagRegex;
+    private final Pattern pattern;
 
     public TagFilter(String tagRegex) {
         this.tagRegex = tagRegex;
+        this.pattern = Pattern.compile(tagRegex);
+    }
+
+    public TagFilter(Pattern pattern) {
+        this.pattern = pattern;
+        this.tagRegex = pattern.pattern();
     }
 
     @Override
     public boolean skipLog(int priority, String tag, String message, Throwable t) {
-        return !tag.matches(tagRegex);
+        return !pattern.matcher(tag).matches();
+        //return !tag.matches(tagRegex);
     }
 
     @Override
     public boolean isLoggable(int priority, String tag) {
-        return tag.matches(tagRegex);
+        return pattern.matcher(tag).matches();
+        //return tag.matches(tagRegex);
     }
 
     public String getTagRegex() {
         return tagRegex;
+    }
+
+    public Pattern getPattern() {
+        return pattern;
     }
 }
