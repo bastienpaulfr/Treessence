@@ -1,5 +1,8 @@
 package fr.bipi.tressence.file;
 
+import android.util.Log;
+
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,7 +18,7 @@ import timber.log.Timber;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.matchesPattern;
+import static org.hamcrest.text.MatchesPattern.matchesPattern;
 
 public class FileLoggerTreeTest {
 
@@ -27,14 +30,21 @@ public class FileLoggerTreeTest {
     @Before
     public void before() throws IOException {
         dir = temporaryFolder.newFolder().getAbsolutePath();
+        Timber.uprootAll();
+    }
+
+    @After
+    public void after() {
+        Timber.uprootAll();
     }
 
     @Test
     public void test() throws IOException {
         // Get tree
         Timber.Tree t = new FileLoggerTree.Builder()
+            .withMinPriority(Log.VERBOSE)
             .withDirName(dir)
-            .build();
+            .buildQuietly();
         assertThat(t, is(instanceOf(FileLoggerTree.class)));
         FileLoggerTree tree = (FileLoggerTree) t;
 
@@ -42,7 +52,7 @@ public class FileLoggerTreeTest {
         Timber.plant(t);
 
         // Log message
-        Timber.i("message");
+        Timber.v("message");
 
         // Test message
         String filename = tree.getFileName(0);
@@ -54,7 +64,7 @@ public class FileLoggerTreeTest {
         String res = new String(FileUtils.getBytesFromFile(f));
         assertThat(res.trim(),
                    matchesPattern("^\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}:\\d{3} " +
-                                  "I/FileLoggerTreeTest[(]\\d{1,3}[)] : message"));
+                                  "V/FileLoggerTreeTest[(]\\d{1,3}[)] : message"));
 
         // Clear files
         tree.clear();
@@ -68,7 +78,7 @@ public class FileLoggerTreeTest {
             .withDirName(dir)
             .withFileLimit(2)
             .withSizeLimit(56)
-            .build();
+            .buildQuietly();
         assertThat(t, is(instanceOf(FileLoggerTree.class)));
         FileLoggerTree tree = (FileLoggerTree) t;
 

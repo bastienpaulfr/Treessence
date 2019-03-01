@@ -24,6 +24,7 @@ import timber.log.Timber;
  * An implementation of `Timber.Tree` which sends log into a circular file.
  * <p>It is using {@link java.util.logging.Logger} to implement circular file logging
  */
+@SuppressWarnings("WeakerAccess")
 public class FileLoggerTree extends FormatterPriorityTree {
     private static final String TAG = "FileLoggerTree";
     private final Logger logger;
@@ -131,7 +132,7 @@ public class FileLoggerTree extends FormatterPriorityTree {
         }
     }
 
-    @SuppressWarnings("WeakerAccess")
+    @SuppressWarnings({"WeakerAccess", "unused"})
     public static class Builder {
         private static final int SIZE_LIMIT = 1048576;
         private static final int NB_FILE_LIMIT = 3;
@@ -227,29 +228,40 @@ public class FileLoggerTree extends FormatterPriorityTree {
         /**
          * Create the file logger tree with options specified.
          *
+         * @return {@link FileLoggerTree}
+         * @throws IOException if file creation fails
+         */
+        @NotNull
+        public FileLoggerTree build() throws IOException {
+            String path = FileUtils.combinePath(dir, fileName);
+
+            FileHandler fileHandler;
+            Logger logger = MyLogger.getLogger(TAG);
+            logger.setLevel(Level.ALL);
+            if (logger.getHandlers().length == 0) {
+                fileHandler = new FileHandler(path, sizeLimit, fileLimit, appendToFile);
+                fileHandler.setFormatter(new NoFormatter());
+                logger.addHandler(fileHandler);
+            } else {
+                fileHandler = (FileHandler) logger.getHandlers()[0];
+            }
+            return new FileLoggerTree(priority, logger, fileHandler, path, fileLimit);
+        }
+
+        /**
+         * Create the file logger tree with options specified.
+         *
          * @return {@link FileLoggerTree} or {@link NoTree} if an exception occurred
          */
         @NotNull
-        public Timber.Tree build() {
+        public Timber.Tree buildQuietly() {
             Timber.Tree tree;
-            String path = FileUtils.combinePath(dir, fileName);
-
             try {
-                FileHandler fileHandler;
-                Logger logger = MyLogger.getLogger(TAG);
-                if (logger.getHandlers().length == 0) {
-                    fileHandler = new FileHandler(path, sizeLimit, fileLimit, appendToFile);
-                    fileHandler.setFormatter(new NoFormatter());
-                    logger.addHandler(fileHandler);
-                } else {
-                    fileHandler = (FileHandler) logger.getHandlers()[0];
-                }
-                tree = new FileLoggerTree(priority, logger, fileHandler, path, fileLimit);
+                tree = build();
             } catch (IOException e) {
                 Timber.e(e);
                 tree = new NoTree();
             }
-
             return tree;
         }
     }
