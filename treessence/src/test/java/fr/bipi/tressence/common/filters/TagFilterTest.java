@@ -41,7 +41,7 @@ public class TagFilterTest {
     public void getTagRegex() {
         filter = new TagFilter("Filter.*");
         assertThat(filter.getTagRegex(), is("Filter.*"));
-        
+
         filter = new TagFilter(Pattern.compile("Filter.*"));
         assertThat(filter.getTagRegex(), is("Filter.*"));
     }
