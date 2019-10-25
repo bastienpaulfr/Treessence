@@ -4,7 +4,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 
 public final class TimeUtils {
 
@@ -19,7 +18,6 @@ public final class TimeUtils {
      * @return Date string
      */
     public static String timestampToDate(long milli, String format) {
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(milli);
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
