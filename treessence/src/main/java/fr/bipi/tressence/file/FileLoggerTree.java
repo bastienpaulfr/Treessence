@@ -39,10 +39,10 @@ public class FileLoggerTree extends FormatterPriorityTree {
      * @param path        Base path of file
      * @param nbFiles     Max number of files
      */
-    private FileLoggerTree(int priority,
-                           Logger logger,
-                           FileHandler fileHandler,
-                           String path, int nbFiles) {
+    protected FileLoggerTree(int priority,
+                             Logger logger,
+                             FileHandler fileHandler,
+                             String path, int nbFiles) {
         super(priority);
         this.logger = logger;
         this.fileHandler = fileHandler;
