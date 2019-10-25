@@ -4,6 +4,9 @@ import android.util.Log;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import fr.bipi.tressence.base.PriorityTree;
 import io.sentry.Sentry;
 import io.sentry.event.Event;
@@ -18,6 +21,14 @@ public class SentryEventTree extends PriorityTree {
     private static final String DEFAULT_PLATFORM = "Android";
 
     /**
+     * Threads from where sentry events will be sent.
+     * <p>
+     * Threads are needed because if connectivity is bad, then {@link Sentry#capture(Event)} can take a long time to
+     * complete
+     */
+    private final ExecutorService executorService = Executors.newFixedThreadPool(1);
+
+    /**
      * @param priority priority from witch log will be logged
      */
     public SentryEventTree(int priority) {
@@ -25,21 +36,27 @@ public class SentryEventTree extends PriorityTree {
     }
 
     @Override
-    protected void log(int priority, String tag, @NotNull String message, Throwable t) {
+    protected void log(final int priority, final String tag, @NotNull final String message, final Throwable t) {
         if (skipLog(priority, tag, message, t)) {
             return;
         }
 
-        EventBuilder eb = new EventBuilder();
-        eb.withTag(KEY_TAG, tag)
-            .withLevel(fromAndroidLogPriorityToSentryLevel(priority))
-            .withMessage(message);
+        executorService.submit(new Runnable() {
+            @Override
+            public void run() {
 
-        Sentry.capture(eb);
+                EventBuilder eb = new EventBuilder();
+                eb.withTag(KEY_TAG, tag)
+                    .withLevel(fromAndroidLogPriorityToSentryLevel(priority))
+                    .withMessage(message);
 
-        if (t != null) {
-            Sentry.capture(t);
-        }
+                Sentry.capture(eb);
+
+                if (t != null) {
+                    Sentry.capture(t);
+                }
+            }
+        });
     }
 
     private Event.Level fromAndroidLogPriorityToSentryLevel(int priority) {
