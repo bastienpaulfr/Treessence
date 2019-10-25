@@ -16,8 +16,8 @@ repositories {
 
 dependencies {
     //Treessence does not include Timber
-    implementation 'com.jakewharton.timber:timber:4.6.0'
-    implementation 'fr.bipi.treessence:treessence:0.2.0'
+    implementation 'com.jakewharton.timber:timber:4.7.1'
+    implementation 'fr.bipi.treessence:treessence:0.3.0'
 }
 ```
 
