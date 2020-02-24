@@ -22,8 +22,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 
-import fr.bipi.tressence.common.utils.TimeUtils;
+import fr.bipi.tressence.common.os.OsInfoProvider;
+import fr.bipi.tressence.common.os.OsInfoProviderDefault;
+import fr.bipi.tressence.common.time.TimeStamper;
 
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class LogcatFormatter implements Formatter {
 
     public static final LogcatFormatter INSTANCE = new LogcatFormatter();
@@ -31,6 +34,9 @@ public class LogcatFormatter implements Formatter {
 
     @SuppressLint("UseSparseArrays")
     private final HashMap<Integer, String> prioPrefixes = new HashMap<>();
+
+    private TimeStamper timeStamper = new TimeStamper("MM-dd HH:mm:ss:SSS");
+    private OsInfoProvider osInfoProvider = new OsInfoProviderDefault();
 
     private LogcatFormatter() {
         prioPrefixes.put(Log.VERBOSE, "V/");
@@ -47,13 +53,29 @@ public class LogcatFormatter implements Formatter {
         if (prio == null) {
             prio = "";
         }
-        return TimeUtils.timestampToDate(System.currentTimeMillis(), "MM-dd HH:mm:ss:SSS")
+        return timeStamper.getCurrentTimeStamp(osInfoProvider.currentTimeMillis())
                + SEP
                + prio
                + (tag == null ? "" : tag)
-               + "(" + Thread.currentThread().getId() + ") :"
+               + "(" + osInfoProvider.getCurrentThreadId() + ") :"
                + SEP
                + message
                + "\n";
+    }
+
+    public void setTimeStamper(TimeStamper timeStamper) {
+        this.timeStamper = timeStamper;
+    }
+
+    public TimeStamper getTimeStamper() {
+        return timeStamper;
+    }
+
+    public OsInfoProvider getOsInfoProvider() {
+        return osInfoProvider;
+    }
+
+    public void setOsInfoProvider(OsInfoProvider osInfoProvider) {
+        this.osInfoProvider = osInfoProvider;
     }
 }

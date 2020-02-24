@@ -33,15 +33,15 @@ afterEvaluate {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
 
     defaultConfig {
         minSdkVersion 17
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode versioning.info.versionCode
         versionName versioning.info.display
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -55,30 +55,32 @@ android {
     }
 
     testOptions {
-        unitTests.returnDefaultValues = true
+        unitTests {
+            returnDefaultValues = true
+            includeAndroidResources = true
+        }
     }
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     implementation 'com.jakewharton.timber:timber:4.7.1'
     implementation 'org.jetbrains:annotations:16.0.1'
 
     compileOnly 'org.slf4j:slf4j-android:1.7.25'
     compileOnly 'io.sentry:sentry-android:1.7.10'
-    compileOnly 'com.crashlytics.sdk.android:crashlytics:2.9.9'
+    compileOnly 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
     testImplementation 'junit:junit:4.12'
-    testImplementation 'org.mockito:mockito-core:2.23.0'
-    testImplementation "org.robolectric:robolectric:3.8"
+    testImplementation 'org.mockito:mockito-core:2.23.4'
+    testImplementation "org.robolectric:robolectric:4.3.1"
     testImplementation "org.awaitility:awaitility:3.0.0"
     testImplementation "org.hamcrest:java-hamcrest:2.0.0.0"
-    testImplementation 'com.crashlytics.sdk.android:crashlytics:2.9.9'
+    testImplementation 'com.crashlytics.sdk.android:crashlytics:2.10.1'
 
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    androidTestImplementation 'androidx.test:runner:1.2.0'
 }
 
 apply from: rootProject.file('gradle/gradle-publish.gradle')

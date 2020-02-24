@@ -119,6 +119,26 @@ Same as above but use `Crashlytics.logException` instead of `Crashlytics.log()`
 Timber.plant(new CrashlyticsLogExceptionTree(Log.ERROR));
 ```
 
+### Custom formatting
+
+It is possible to use a custom formatter with trees.
+
+```java
+SystemLogTree tree = new SystemLogTree();
+tree.setFormatter(LogcatFormatter.INSTANCE);
+```
+
+For timezone issue, a custom timezone can be set
+
+```java
+// Create object that will provide timestamp string
+TimeStamper timeStamper = new TimeStamper("MM-dd HH:mm:ss:SSS", TimeZone.getTimeZone("GMT+2"))
+// Set time stamper to LogcatFormatter
+LogcatFormatter.INSTANCE.setTimeStamper(timeStamper);
+// Formatter can be set to a Tree
+...
+```
+
 ## Licence
 
    Copyright [2017] Bastien PAUL

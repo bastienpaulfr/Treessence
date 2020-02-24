@@ -25,7 +25,7 @@ public class FormatterPriorityTreeTest extends RobolectricTest {
 
         assertThat(tree.format(1, "tag", "message"), is("1, tag, message"));
         tree.d("message");
-        assertLog().hasDebugMessage("NativeMethodAccessorImp", "3, NativeMethodAccessorImp, message")
+        assertLog().hasDebugMessage("NativeMethodAccessorImpl", "3, NativeMethodAccessorImpl, message")
             .hasNoMoreMessages();
     }
 }

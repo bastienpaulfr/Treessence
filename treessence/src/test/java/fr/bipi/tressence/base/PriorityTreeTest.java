@@ -2,7 +2,9 @@ package fr.bipi.tressence.base;
 
 import android.util.Log;
 
+import org.junit.Before;
 import org.junit.Test;
+import org.robolectric.shadows.ShadowLog;
 
 import fr.bipi.tressence.robolectric.RobolectricTest;
 
@@ -40,7 +42,7 @@ public class PriorityTreeTest extends RobolectricTest {
         tree = new PriorityTree(Log.VERBOSE);
         tree.v("log");
         assertLog()
-            .hasVerboseMessage("NativeMethodAccessorImp", "log")
+            .hasVerboseMessage("NativeMethodAccessorImpl", "log")
             .hasNoMoreMessages();
     }
 

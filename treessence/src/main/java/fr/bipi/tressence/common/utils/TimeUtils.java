@@ -1,10 +1,11 @@
 package fr.bipi.tressence.common.utils;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
+@Deprecated
 public final class TimeUtils {
 
     private TimeUtils() {
@@ -17,11 +18,11 @@ public final class TimeUtils {
      * @param format Date format
      * @return Date string
      */
-    public static String timestampToDate(long milli, String format) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(milli);
+    @Deprecated
+    public static String timestampToDateString(long milli, String format) {
+        Date date = new Date(milli);
         SimpleDateFormat sdf = new SimpleDateFormat(format, Locale.US);
-        Date date = calendar.getTime();
+        sdf.setTimeZone(TimeZone.getDefault());
         return sdf.format(date);
     }
 

@@ -111,7 +111,7 @@ bintray {
     user = project.hasProperty("bintray_user")?project.bintray_user:""
     key = project.hasProperty("bintray_key")?project.bintray_key:""
     pkg {
-        repo = "maven"
+        repo = (versioning.info.branchType == "release")? "maven" : "maven-snapshot"
         name = rootProject.name
         licenses = ["Apache-2.0"]
         labels = ['Timber', 'Android', 'Log']

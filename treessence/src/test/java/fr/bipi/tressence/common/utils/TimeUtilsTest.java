@@ -12,7 +12,7 @@ public class TimeUtilsTest {
     @Test
     public void timestampToDate() {
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-        String date = TimeUtils.timestampToDate(1571991195000L, "yyyyMMddHHmmss");
+        String date = TimeUtils.timestampToDateString(1571991195000L, "yyyyMMddHHmmss");
         assertThat(date, is("20191025081315"));
     }
 }

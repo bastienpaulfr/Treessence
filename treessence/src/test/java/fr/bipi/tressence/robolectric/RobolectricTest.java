@@ -1,7 +1,9 @@
 package fr.bipi.tressence.robolectric;
 
+import android.os.Build;
 import android.util.Log;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
@@ -11,12 +13,9 @@ import org.robolectric.shadows.ShadowLog;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import fr.bipi.tressence.BuildConfig;
-
 import static org.awaitility.Awaitility.await;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertTrue;
 
 
 /**
@@ -25,7 +24,7 @@ import static org.junit.Assert.assertTrue;
  * Robolectric tests are done in a single thread !
  */
 @RunWith(RobolectricTestRunner.class)
-@Config(constants = BuildConfig.class, sdk = 21, manifest = Config.NONE)
+@Config(sdk = Build.VERSION_CODES.P)
 public abstract class RobolectricTest {
 
     private AtomicBoolean unblock = new AtomicBoolean(false);
@@ -34,6 +33,11 @@ public abstract class RobolectricTest {
     public static void beforeClass() {
         //Configure robolectric
         ShadowLog.stream = System.out;
+    }
+
+    @Before
+    public void roboSetup() {
+        ShadowLog.clear();
     }
 
     public static LogAssert assertLog() {
@@ -55,10 +59,6 @@ public abstract class RobolectricTest {
     public void block() {
         await().untilTrue(unblock);
         unblock.set(false);
-    }
-
-    public void doNotGoHere() {
-        assertTrue(false);
     }
 
     public static final class LogAssert {

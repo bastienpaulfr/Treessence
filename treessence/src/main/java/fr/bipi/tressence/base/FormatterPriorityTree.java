@@ -36,9 +36,19 @@ public class FormatterPriorityTree extends PriorityTree {
      * @param f formatter
      * @return itself
      */
+    @Deprecated
     public FormatterPriorityTree withFormatter(Formatter f) {
         this.formatter = f;
         return this;
+    }
+
+    /**
+     * Set {@link Formatter}
+     *
+     * @param formatter formatter
+     */
+    public void setFormatter(Formatter formatter) {
+        this.formatter = formatter;
     }
 
     /**
