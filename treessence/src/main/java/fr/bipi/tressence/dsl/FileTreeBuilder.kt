@@ -3,7 +3,6 @@ package fr.bipi.tressence.dsl
 import fr.bipi.tressence.common.filters.mergeFilters
 import fr.bipi.tressence.common.formatter.LogcatFormatter
 import fr.bipi.tressence.file.FileLoggerTree
-import timber.log.Timber
 
 
 typealias FileTreeDeclaration = FileTreeScope.() -> Unit
@@ -20,18 +19,16 @@ class FileTreeScope : TreeScope() {
  * Builder for [FileLoggerTree]
  */
 object FileTreeBuilder {
-    fun build(data: FileTreeScope): Timber.Tree {
-        return FileLoggerTree.Builder().apply {
-            with(data) {
-                withDirName(dir)
-                withFileName(fileName)
-                withMinPriority(level)
-                withSizeLimit(sizeLimit)
-                withFileLimit(fileLimit)
-                withFilter(filters.mergeFilters())
-                withFormatter(formatter ?: LogcatFormatter.INSTANCE)
-                appendToFile(appendToFile)
-            }
-        }.build()
-    }
+    fun build(data: FileTreeScope) = FileLoggerTree.Builder().apply {
+        with(data) {
+            withDirName(dir)
+            withFileName(fileName)
+            withMinPriority(level)
+            withSizeLimit(sizeLimit)
+            withFileLimit(fileLimit)
+            withFilter(filters.mergeFilters())
+            withFormatter(formatter ?: LogcatFormatter.INSTANCE)
+            appendToFile(appendToFile)
+        }
+    }.build()
 }

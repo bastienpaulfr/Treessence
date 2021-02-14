@@ -2,8 +2,14 @@ package fr.bipi.tressence.dsl
 
 import android.util.Log
 import fr.bipi.tressence.common.filters.NoFilter
+import fr.bipi.tressence.console.SystemLogTree
+import fr.bipi.tressence.console.ThrowErrorTree
 import fr.bipi.tressence.context.GlobalContext.startTimber
 import fr.bipi.tressence.context.GlobalContext.stopTimber
+import fr.bipi.tressence.file.FileLoggerTree
+import fr.bipi.tressence.sentry.SentryBreadcrumbTree
+import fr.bipi.tressence.sentry.SentryEventTree
+import fr.bipi.tressence.ui.TextViewTree
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should be instance of`
 import org.junit.Rule
@@ -72,7 +78,7 @@ class DslTest {
                 formatter { prio, tag, message ->
                     ""
                 }
-            }.`should be instance of`(Timber.Tree::class.java)
+            }.`should be instance of`(FileLoggerTree::class.java)
 
             systemTree {
                 level = Log.INFO
@@ -86,7 +92,7 @@ class DslTest {
                 formatter { prio, tag, message ->
                     ""
                 }
-            }.`should be instance of`(Timber.Tree::class.java)
+            }.`should be instance of`(SystemLogTree::class.java)
 
             throwErrorTree {
                 level = Log.INFO
@@ -100,7 +106,7 @@ class DslTest {
                 formatter { prio, tag, message ->
                     ""
                 }
-            }.`should be instance of`(Timber.Tree::class.java)
+            }.`should be instance of`(ThrowErrorTree::class.java)
 
             sentryBreadCrumbTree {
                 level = Log.INFO
@@ -114,7 +120,7 @@ class DslTest {
                 formatter { prio, tag, message ->
                     ""
                 }
-            }.`should be instance of`(Timber.Tree::class.java)
+            }.`should be instance of`(SentryBreadcrumbTree::class.java)
 
             sentryEventTree {
                 level = Log.INFO
@@ -128,7 +134,7 @@ class DslTest {
                 formatter { prio, tag, message ->
                     ""
                 }
-            }.`should be instance of`(Timber.Tree::class.java)
+            }.`should be instance of`(SentryEventTree::class.java)
 
             textViewTree {
                 level = Log.INFO
@@ -143,7 +149,7 @@ class DslTest {
                 formatter { prio, tag, message ->
                     ""
                 }
-            }.`should be instance of`(Timber.Tree::class.java)
+            }.`should be instance of`(TextViewTree::class.java)
         }
 
         Timber.treeCount().`should be equal to`(10)

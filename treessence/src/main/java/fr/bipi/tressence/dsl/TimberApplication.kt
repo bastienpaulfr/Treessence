@@ -69,66 +69,66 @@ object TimberApplication {
     fun tree(
         writer: Writer,
         declaration: TreeDeclaration
-    ): Timber.Tree {
+    ) = with(declaration) {
         val data = TreeScope()
-        declaration(data)
-        return TreeBuilder.buildTree(writer, data).also {
+        this(data)
+        TreeBuilder.buildTree(writer, data).also {
             Timber.plant(it)
         }
     }
 
-    fun logcatTree(declaration: TreeDeclaration): Timber.Tree {
+    fun logcatTree(declaration: TreeDeclaration) = with(declaration) {
         val data = TreeScope()
-        declaration(data)
-        return TreeBuilder.buildLogcat(data).also {
+        this(data)
+        TreeBuilder.buildLogcat(data).also {
             Timber.plant(it)
         }
     }
 
-    fun fileTree(declaration: FileTreeDeclaration): Timber.Tree {
+    fun fileTree(declaration: FileTreeDeclaration) = with(declaration) {
         val data = FileTreeScope()
-        declaration(data)
-        return FileTreeBuilder.build(data).also {
+        this(data)
+        FileTreeBuilder.build(data).also {
             Timber.plant(it)
         }
     }
 
-    fun systemTree(declaration: TreeDeclaration): Timber.Tree {
+    fun systemTree(declaration: TreeDeclaration) = with(declaration) {
         val data = TreeScope()
-        declaration(data)
-        return SystemTreeBuilder.build(data).also {
+        this(data)
+        SystemTreeBuilder.build(data).also {
             Timber.plant(it)
         }
     }
 
-    fun throwErrorTree(declaration: TreeDeclaration): Timber.Tree {
+    fun throwErrorTree(declaration: TreeDeclaration) = with(declaration) {
         val data = TreeScope()
-        declaration(data)
-        return ThrowErrorTreeBuilder.build(data).also {
+        this(data)
+        ThrowErrorTreeBuilder.build(data).also {
             Timber.plant(it)
         }
     }
 
-    fun sentryBreadCrumbTree(declaration: TreeDeclaration): Timber.Tree {
+    fun sentryBreadCrumbTree(declaration: TreeDeclaration) = with(declaration) {
         val data = TreeScope()
-        declaration(data)
-        return SentryTreeBuilder.buildBreadCrumbTree(data).also {
+        this(data)
+        SentryTreeBuilder.buildBreadCrumbTree(data).also {
             Timber.plant(it)
         }
     }
 
-    fun sentryEventTree(declaration: TreeDeclaration): Timber.Tree {
+    fun sentryEventTree(declaration: TreeDeclaration) = with(declaration) {
         val data = TreeScope()
-        declaration(data)
-        return SentryTreeBuilder.buildEventTree(data).also {
+        this(data)
+        SentryTreeBuilder.buildEventTree(data).also {
             Timber.plant(it)
         }
     }
 
-    fun textViewTree(declaration: TextViewTreeDeclaration): Timber.Tree {
+    fun textViewTree(declaration: TextViewTreeDeclaration) = with(declaration) {
         val data = TextViewTreeScope()
-        declaration(data)
-        return TextViewTreeBuilder.build(data).also {
+        this(data)
+        TextViewTreeBuilder.build(data).also {
             Timber.plant(it)
         }
     }
