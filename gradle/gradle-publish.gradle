@@ -106,27 +106,3 @@ publishing {
         }
     }
 }
-
-bintray {
-    user = project.hasProperty("bintray_user")?project.bintray_user:""
-    key = project.hasProperty("bintray_key")?project.bintray_key:""
-    pkg {
-        repo = (versioning.info.branchType == "release")? "maven" : "maven-snapshot"
-        name = rootProject.name
-        licenses = ["Apache-2.0"]
-        labels = ['Timber', 'Android', 'Log']
-        vcsUrl = POM_SCM_URL
-        websiteUrl = POM_URL
-        issueTrackerUrl = POM_ISSUES_URL
-        githubRepo = GITHUB_REPO //Optional Github repository
-        githubReleaseNotesFile = GITHUB_README //Optional Github readme file
-        version {
-            name = v
-            desc = POM_DESCRIPTION
-            released = new Date()
-            vcsTag = t
-        }
-    }
-    publications = ['art']
-    publish = true
-}

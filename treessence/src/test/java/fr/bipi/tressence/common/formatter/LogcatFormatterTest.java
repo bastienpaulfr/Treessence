@@ -9,7 +9,7 @@ import fr.bipi.tressence.common.os.OsInfoProvider;
 import fr.bipi.tressence.common.time.TimeStamper;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertThat;
 
 public class LogcatFormatterTest {
 
@@ -17,15 +17,15 @@ public class LogcatFormatterTest {
 
     @Before
     public void before() {
-        formatter = LogcatFormatter.INSTANCE;
+        formatter = LogcatFormatter.Companion.getINSTANCE();
         formatter.setTimeStamper(new TimeStamper("MM-dd HH:mm:ss:SSS", TimeZone.getTimeZone("GMT+2")));
         formatter.setOsInfoProvider(new OsInfoProvider() {
 
             private int counter = 0;
-            private long base = 1571991195000L;
 
             @Override
-            public long currentTimeMillis() {
+            public long getCurrentTimeMillis() {
+                long base = 1571991195000L;
                 return base + (counter++ * 1000);
             }
 

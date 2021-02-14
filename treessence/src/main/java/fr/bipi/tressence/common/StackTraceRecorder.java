@@ -23,7 +23,7 @@ import java.util.List;
 import timber.log.Timber;
 
 /**
- * Records stack trace without timber code. Used by {@link fr.bipi.tressence.crash.CrashlyticsLogTree} to purify report.
+ * Records stack trace without timber code.
  */
 public class StackTraceRecorder extends Throwable {
     public StackTraceRecorder(String detailMessage) {

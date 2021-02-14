@@ -2,13 +2,15 @@ package fr.bipi.tressence.common.utils;
 
 import java.lang.reflect.Method;
 
+import timber.log.Timber;
+
 /**
  * Utility class to get some information (method name, thread, etc.)
  */
 public final class Info {
 
     private static final Method GET_ST;
-    private static int sDepth = 2;
+    private static int sDepth;
 
     static {
         Method m = null;
@@ -31,7 +33,7 @@ public final class Info {
      */
     public static String getThreadInfoString() {
         Thread t = Thread.currentThread();
-        return String.valueOf(t) + ", id : " + t.getId();
+        return t + ", id : " + t.getId();
     }
 
     /**
@@ -76,10 +78,13 @@ public final class Info {
             } else {
                 element = getStackTraceElement(depth);
             }
-            return element.getMethodName();
-            //return element.toString();
+            if (element != null) {
+                return element.getMethodName();
+            } else {
+                return "";
+            }
         } catch (Exception e) {
-            e.printStackTrace();
+            Timber.e(e.toString());
         }
         return "";
     }

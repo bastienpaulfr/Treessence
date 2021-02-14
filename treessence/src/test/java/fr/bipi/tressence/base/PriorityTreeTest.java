@@ -2,9 +2,7 @@ package fr.bipi.tressence.base;
 
 import android.util.Log;
 
-import org.junit.Before;
 import org.junit.Test;
-import org.robolectric.shadows.ShadowLog;
 
 import fr.bipi.tressence.robolectric.RobolectricTest;
 

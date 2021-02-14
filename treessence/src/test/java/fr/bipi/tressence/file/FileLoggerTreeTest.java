@@ -8,11 +8,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import fr.bipi.tressence.common.utils.FileUtils;
 import timber.log.Timber;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -38,8 +39,40 @@ public class FileLoggerTreeTest {
         Timber.uprootAll();
     }
 
+    /**
+     * Return bytes contained in file
+     *
+     * @param f File
+     * @return byte[] data or null if something goes wrong
+     */
+    public static byte[] getBytesFromFile(File f) {
+        FileInputStream in = null;
+        byte[] data = new byte[0];
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        byte[] buffer = new byte[2048]; // Adjust if you want
+        int bytesRead;
+        try {
+            in = new FileInputStream(f);
+            while ((bytesRead = in.read(buffer)) != -1) {
+                out.write(buffer, 0, bytesRead);
+            }
+            data = out.toByteArray();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (in != null) {
+                    in.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return data;
+    }
+
     @Test
-    public void test() throws IOException {
+    public void test() {
         // Get tree
         Timber.Tree t = new FileLoggerTree.Builder()
             .withMinPriority(Log.VERBOSE)
@@ -61,7 +94,7 @@ public class FileLoggerTreeTest {
         assertThat(f.exists(), is(true));
         assertThat(f.isFile(), is(true));
 
-        String res = new String(FileUtils.getBytesFromFile(f));
+        String res = new String(getBytesFromFile(f));
         assertThat(res.trim(),
                    matchesPattern("^\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}:\\d{3} " +
                                   "V/FileLoggerTreeTest[(]\\d{1,3}[)] : message"));
@@ -69,6 +102,13 @@ public class FileLoggerTreeTest {
         // Clear files
         tree.clear();
         assertThat(f.exists(), is(false));
+    }
+
+    private void testFile(String expect, String gotten, boolean exists) {
+        assertThat(expect, is(gotten));
+        File f0 = new File(gotten);
+        assertThat(f0.exists(), is(exists));
+        assertThat(f0.isFile(), is(exists));
     }
 
     @Test
@@ -101,11 +141,11 @@ public class FileLoggerTreeTest {
             assertThat(f.isFile(), is(true));
         }
 
-        String res = new String(FileUtils.getBytesFromFile(list.get(0)));
+        String res = new String(getBytesFromFile(list.get(0)));
         assertThat(res.trim(),
                    matchesPattern("^\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}:\\d{3} " +
                                   "I/FileLoggerTreeTest[(]\\d{1,3}[)] : message"));
-        res = new String(FileUtils.getBytesFromFile(list.get(1)));
+        res = new String(getBytesFromFile(list.get(1)));
         assertThat(res.trim(),
                    matchesPattern("^\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}:\\d{3} " +
                                   "I/FileLoggerTreeTest[(]\\d{1,3}[)] : 1234567890$"));
@@ -116,13 +156,6 @@ public class FileLoggerTreeTest {
         for (File f : list) {
             assertThat(f.exists(), is(false));
         }
-    }
-
-    private void testFile(String expect, String gotten, boolean exists) {
-        assertThat(expect, is(gotten));
-        File f0 = new File(gotten);
-        assertThat(f0.exists(), is(exists));
-        assertThat(f0.isFile(), is(exists));
     }
 
 }

@@ -40,9 +40,9 @@ public class TagFilterTest {
     @Test
     public void getTagRegex() {
         filter = new TagFilter("Filter.*");
-        assertThat(filter.getTagRegex(), is("Filter.*"));
+        assertThat(filter.getTagRegex$treessence_debug(), is("Filter.*"));
 
         filter = new TagFilter(Pattern.compile("Filter.*"));
-        assertThat(filter.getTagRegex(), is("Filter.*"));
+        assertThat(filter.getTagRegex$treessence_debug(), is("Filter.*"));
     }
 }

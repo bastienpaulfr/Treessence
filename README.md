@@ -99,26 +99,6 @@ SentryEventTree tree = new SentryEventTree(Log.INFO).withFilter(TagFilter);
 Timber.plant(tree);
 ```
 
-#### CrashlyticsLogTree
-
-An implementation of `Timber.Tree` which sends log to Crashlytics.
-
-You need to add crashlytics dependency to use this tree.
-
-```java
-// Send log to crashlytics for logs starting from warning
-Timber.plant(new CrashlyticsLogTree(Log.WARN));
-```
-
-#### CrashlyticsLogExceptionTree
-
-Same as above but use `Crashlytics.logException` instead of `Crashlytics.log()`
-
-```java
-// Send log to crashlytics for logs starting from warning
-Timber.plant(new CrashlyticsLogExceptionTree(Log.ERROR));
-```
-
 ### Custom formatting
 
 It is possible to use a custom formatter with trees.
@@ -138,6 +118,169 @@ LogcatFormatter.INSTANCE.setTimeStamper(timeStamper);
 // Formatter can be set to a Tree
 ...
 ```
+
+## DSL
+
+Since version 1.0, there is a dsl to configure Timber in Applications
+
+### Starting Timber
+
+```kotlin
+//Create a TimberApplication to configure Timber.
+startTimber {
+
+}
+
+```
+
+### Adding trees
+
+
+```
+startTimber {
+    // Add a Timber.DebugTree
+    debugTree()
+
+
+    // Add a Tree that log only from Log.INFO level
+    releaseTree()
+
+    // Add a simple tree with a filter and a formatter
+    tree(
+        { s: String, t: Throwable? ->
+        // Log goes through this method and it is up to you to write those where you want
+        }
+    ) {
+        level = Log.INFO
+
+        filter(NoFilter())
+
+        filter { prio, tag, m, t ->
+            false
+        }
+
+        formatter { prio, tag, message ->
+            ""
+        }
+    }
+
+    // Add a Tree that log into logcat
+    logcatTree {
+        level = Log.INFO
+
+        filter(NoFilter())
+
+        filter { prio, tag, m, t ->
+            false
+        }
+
+        formatter { prio, tag, message ->
+            ""
+        }
+    }
+
+    // Add a tree that log into a file
+    fileTree {
+        level = Log.INFO
+        fileName = "myfile"
+        dir = temporaryFolder.newFolder().absolutePath
+        sizeLimit = 10
+        fileLimit = 1
+        appendToFile = true
+
+        filter { prio, tag, m, t ->
+            false
+        }
+
+        formatter { prio, tag, message ->
+            ""
+        }
+    }
+
+    // Add a tree that log using System.out.print()
+    systemTree {
+        level = Log.INFO
+
+        filter(NoFilter())
+
+        filter { prio, tag, m, t ->
+            false
+        }
+
+        formatter { prio, tag, message ->
+            ""
+        }
+    }
+
+    // Add a tree that is throwing an exception when Timber.e() is called
+    throwErrorTree {
+        level = Log.INFO
+
+        filter(NoFilter())
+
+        filter { prio, tag, m, t ->
+            false
+        }
+
+        formatter { prio, tag, message ->
+            ""
+        }
+    }
+
+    // Add a tree that put breadcrumb into Sentry API
+    sentryBreadCrumbTree {
+        level = Log.INFO
+
+        filter(NoFilter())
+
+        filter { prio, tag, m, t ->
+            false
+        }
+
+        formatter { prio, tag, message ->
+            ""
+        }
+    }
+
+    // Add a tree that sends an event to sentry on each log.
+    sentryEventTree {
+        level = Log.INFO
+
+        filter(NoFilter())
+
+        filter { prio, tag, m, t ->
+            false
+        }
+
+        formatter { prio, tag, message ->
+            ""
+        }
+    }
+
+    // Add a tree that is logging into a TextView
+    textViewTree {
+        level = Log.INFO
+        append = true
+
+        filter(NoFilter())
+
+        filter { prio, tag, m, t ->
+            false
+        }
+
+        formatter { prio, tag, message ->
+            ""
+        }
+    }
+}
+```
+
+### Uproot all trees
+
+```kotlin
+stopTimber()
+```
+
 
 ## Licence
 
