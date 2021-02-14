@@ -95,7 +95,7 @@ You can also add a filter for SentryEvent
 ```java
 // This will send an event to Sentry only if priority exceeds "ERROR" level and class name starts with "Sentry"
 TagFilter filter = new TagFilter("Sentry.*");
-SentryEventTree tree = new SentryEventTree(Log.INFO).withFilter(TagFilter);
+SentryEventTree tree = new SentryEventTree(Log.INFO, filter);
 Timber.plant(tree);
 ```
 
@@ -104,8 +104,7 @@ Timber.plant(tree);
 It is possible to use a custom formatter with trees.
 
 ```java
-SystemLogTree tree = new SystemLogTree();
-tree.setFormatter(LogcatFormatter.INSTANCE);
+SystemLogTree tree = new SystemLogTree(Log.VERBOSE, NoFilter.INSTANCE, LogcatFormatter.INSTANCE);
 ```
 
 For timezone issue, a custom timezone can be set
@@ -116,12 +115,12 @@ TimeStamper timeStamper = new TimeStamper("MM-dd HH:mm:ss:SSS", TimeZone.getTime
 // Set time stamper to LogcatFormatter
 LogcatFormatter.INSTANCE.setTimeStamper(timeStamper);
 // Formatter can be set to a Tree
-...
+[...]
 ```
 
 ## DSL
 
-Since version 1.0, there is a dsl to configure Timber in Applications
+Since version 1.0, there is a Kotlin dsl to configure Timber in Applications
 
 ### Starting Timber
 
@@ -136,7 +135,7 @@ startTimber {
 ### Adding trees
 
 
-```
+```kotlin
 startTimber {
     // Add a Timber.DebugTree
     debugTree()
