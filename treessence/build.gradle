@@ -13,22 +13,6 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 
-task checkstyle(type: Checkstyle) {
-    configFile rootProject.file('config/checkstyle.xml')
-    source 'src/main/java'
-    ignoreFailures false
-    showViolations true
-    include '**/*.java'
-
-    classpath = files()
-}
-
-afterEvaluate {
-    if (project.tasks.findByName('check')) {
-        check.dependsOn('checkstyle')
-    }
-}
-
 android {
     compileSdkVersion 29
 

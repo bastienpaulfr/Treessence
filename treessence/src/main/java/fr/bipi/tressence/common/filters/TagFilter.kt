@@ -3,7 +3,7 @@ package fr.bipi.tressence.common.filters
 import java.util.regex.Pattern
 
 class TagFilter : Filter {
-    internal val tagRegex: String
+    val tagRegex: String
     private val pattern: Pattern
 
     constructor(tagRegex: String) {

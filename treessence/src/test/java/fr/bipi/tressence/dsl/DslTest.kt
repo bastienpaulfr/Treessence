@@ -146,6 +146,8 @@ class DslTest {
         }
 
         Timber.treeCount().`should be equal to`(10)
+        stopTimber()
+        Timber.treeCount().`should be equal to`(0)
     }
 
     @Test
