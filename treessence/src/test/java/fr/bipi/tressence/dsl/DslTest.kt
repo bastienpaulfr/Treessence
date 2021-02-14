@@ -5,6 +5,7 @@ import fr.bipi.tressence.common.filters.NoFilter
 import fr.bipi.tressence.context.GlobalContext.startTimber
 import fr.bipi.tressence.context.GlobalContext.stopTimber
 import org.amshove.kluent.`should be equal to`
+import org.amshove.kluent.`should be instance of`
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -20,9 +21,9 @@ class DslTest {
     @Test
     fun startTimberDsl() {
         startTimber {
-            debugTree()
+            debugTree().`should be instance of`(Timber.Tree::class.java)
 
-            releaseTree()
+            releaseTree().`should be instance of`(Timber.Tree::class.java)
 
             tree(
                 { s: String, t: Throwable? ->
@@ -40,7 +41,7 @@ class DslTest {
                 formatter { prio, tag, message ->
                     ""
                 }
-            }
+            }.`should be instance of`(Timber.Tree::class.java)
 
             logcatTree {
                 level = Log.INFO
@@ -54,7 +55,7 @@ class DslTest {
                 formatter { prio, tag, message ->
                     ""
                 }
-            }
+            }.`should be instance of`(Timber.Tree::class.java)
 
             fileTree {
                 level = Log.INFO
@@ -71,7 +72,7 @@ class DslTest {
                 formatter { prio, tag, message ->
                     ""
                 }
-            }
+            }.`should be instance of`(Timber.Tree::class.java)
 
             systemTree {
                 level = Log.INFO
@@ -85,7 +86,7 @@ class DslTest {
                 formatter { prio, tag, message ->
                     ""
                 }
-            }
+            }.`should be instance of`(Timber.Tree::class.java)
 
             throwErrorTree {
                 level = Log.INFO
@@ -99,7 +100,7 @@ class DslTest {
                 formatter { prio, tag, message ->
                     ""
                 }
-            }
+            }.`should be instance of`(Timber.Tree::class.java)
 
             sentryBreadCrumbTree {
                 level = Log.INFO
@@ -113,7 +114,7 @@ class DslTest {
                 formatter { prio, tag, message ->
                     ""
                 }
-            }
+            }.`should be instance of`(Timber.Tree::class.java)
 
             sentryEventTree {
                 level = Log.INFO
@@ -127,7 +128,7 @@ class DslTest {
                 formatter { prio, tag, message ->
                     ""
                 }
-            }
+            }.`should be instance of`(Timber.Tree::class.java)
 
             textViewTree {
                 level = Log.INFO
@@ -142,7 +143,7 @@ class DslTest {
                 formatter { prio, tag, message ->
                     ""
                 }
-            }
+            }.`should be instance of`(Timber.Tree::class.java)
         }
 
         Timber.treeCount().`should be equal to`(10)

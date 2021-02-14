@@ -229,9 +229,9 @@ startTimber {
 
     // Add a tree that put breadcrumb into Sentry API
     sentryBreadCrumbTree {
-        level = Log.INFO
+        level = Log.VERBOSE
 
-        filter(NoFilter())
+        filter(TagFilter("^(?!.*(Sentry|App)).*"))
 
         filter { prio, tag, m, t ->
             false
@@ -244,9 +244,9 @@ startTimber {
 
     // Add a tree that sends an event to sentry on each log.
     sentryEventTree {
-        level = Log.INFO
+        level = Log.ERROR
 
-        filter(NoFilter())
+        filter(TagFilter("^(?!.*(Sentry|App)).*"))
 
         filter { prio, tag, m, t ->
             false

@@ -20,6 +20,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.instanceOf;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.text.MatchesPattern.matchesPattern;
+import static org.junit.Assert.fail;
 
 public class FileLoggerTreeTest {
 
@@ -158,4 +159,37 @@ public class FileLoggerTreeTest {
         }
     }
 
+    @Test
+    public void nonExistingDir() {
+        try {
+            String newDir = dir + "/another/non/existing/dir";
+            FileLoggerTree t = new FileLoggerTree.Builder()
+                .withDirName(newDir)
+                .build();
+
+            // Plant it
+            Timber.plant(t);
+
+            Timber.i("message");
+
+            testFile(t.getFileName(0), newDir + "/log.0", true);
+
+
+            ArrayList<File> list = new ArrayList<>(t.getFiles());
+            for (File f : list) {
+                assertThat(f.exists(), is(true));
+                assertThat(f.isFile(), is(true));
+            }
+
+            String res = new String(getBytesFromFile(list.get(0)));
+
+            assertThat(res.trim(),
+                       matchesPattern("^\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}:\\d{3} " +
+                                      "I/FileLoggerTreeTest[(]\\d{1,3}[)] : message"));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
 }

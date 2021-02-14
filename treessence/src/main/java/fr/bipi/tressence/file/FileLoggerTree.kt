@@ -227,6 +227,13 @@ class FileLoggerTree @JvmOverloads constructor(
          */
         @Throws(IOException::class)
         fun build(): FileLoggerTree {
+            // 1st create dir if it does not exists
+            File(dir).apply {
+                if (!isDirectory) {
+                    mkdirs()
+                }
+            }
+
             val path = FileUtils.combinePath(dir, fileName)
             val fileHandler: FileHandler
             val logger = MyLogger.getLogger(TAG)

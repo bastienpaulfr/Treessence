@@ -28,42 +28,42 @@ object TimberApplication {
         }
     }
 
-    fun priorityTree(level: Int) {
-        Timber.plant(PriorityTree(level))
+    fun priorityTree(level: Int): PriorityTree = PriorityTree(level).also {
+        Timber.plant(it)
     }
 
-    fun filterTree(level: Int, filter: (priority: Int, tag: String?, message: String, t: Throwable?) -> Boolean) {
-        Timber.plant(PriorityTree(level, object : Filter {
+    fun filterTree(level: Int, filter: (priority: Int, tag: String?, message: String, t: Throwable?) -> Boolean) =
+        PriorityTree(level, object : Filter {
             override fun isLoggable(priority: Int, tag: String?) = true
 
             override fun skipLog(priority: Int, tag: String?, message: String, t: Throwable?) = filter(priority, tag, message, t)
-        }))
-    }
+        }).also {
+            Timber.plant(it)
+        }
 
-    fun formatterTree(level: Int, formatter: (priority: Int, tag: String?, message: String) -> String) {
-        Timber.plant(FormatterPriorityTree(level, formatter = object : Formatter {
+    fun formatterTree(level: Int, formatter: (priority: Int, tag: String?, message: String) -> String) =
+        FormatterPriorityTree(level, formatter = object : Formatter {
             override fun format(priority: Int, tag: String?, message: String) = formatter(priority, tag, message)
-        }))
-    }
+        }).also {
+            Timber.plant(it)
+        }
 
     fun filterAndFormatterTree(
         level: Int,
         filter: (priority: Int, tag: String?, message: String, t: Throwable?) -> Boolean,
         formatter: (priority: Int, tag: String?, message: String) -> String
-    ) {
-        Timber.plant(
-            FormatterPriorityTree(
-                level,
-                filter = object : Filter {
-                    override fun isLoggable(priority: Int, tag: String?) = true
+    ) = FormatterPriorityTree(
+        level,
+        filter = object : Filter {
+            override fun isLoggable(priority: Int, tag: String?) = true
 
-                    override fun skipLog(priority: Int, tag: String?, message: String, t: Throwable?) = filter(priority, tag, message, t)
-                },
-                formatter = object : Formatter {
-                    override fun format(priority: Int, tag: String?, message: String) = formatter(priority, tag, message)
-                }
-            )
-        )
+            override fun skipLog(priority: Int, tag: String?, message: String, t: Throwable?) = filter(priority, tag, message, t)
+        },
+        formatter = object : Formatter {
+            override fun format(priority: Int, tag: String?, message: String) = formatter(priority, tag, message)
+        }
+    ).also {
+        Timber.plant(it)
     }
 
     fun tree(
@@ -77,45 +77,59 @@ object TimberApplication {
         }
     }
 
-    fun logcatTree(declaration: TreeDeclaration) {
+    fun logcatTree(declaration: TreeDeclaration): Timber.Tree {
         val data = TreeScope()
         declaration(data)
-        Timber.plant(TreeBuilder.buildLogcat(data))
+        return TreeBuilder.buildLogcat(data).also {
+            Timber.plant(it)
+        }
     }
 
-    fun fileTree(declaration: FileTreeDeclaration) {
+    fun fileTree(declaration: FileTreeDeclaration): Timber.Tree {
         val data = FileTreeScope()
         declaration(data)
-        Timber.plant(FileTreeBuilder.build(data))
+        return FileTreeBuilder.build(data).also {
+            Timber.plant(it)
+        }
     }
 
-    fun systemTree(declaration: TreeDeclaration) {
+    fun systemTree(declaration: TreeDeclaration): Timber.Tree {
         val data = TreeScope()
         declaration(data)
-        Timber.plant(SystemTreeBuilder.build(data))
+        return SystemTreeBuilder.build(data).also {
+            Timber.plant(it)
+        }
     }
 
-    fun throwErrorTree(declaration: TreeDeclaration) {
+    fun throwErrorTree(declaration: TreeDeclaration): Timber.Tree {
         val data = TreeScope()
         declaration(data)
-        Timber.plant(ThrowErrorTreeBuilder.build(data))
+        return ThrowErrorTreeBuilder.build(data).also {
+            Timber.plant(it)
+        }
     }
 
-    fun sentryBreadCrumbTree(declaration: TreeDeclaration) {
+    fun sentryBreadCrumbTree(declaration: TreeDeclaration): Timber.Tree {
         val data = TreeScope()
         declaration(data)
-        Timber.plant(SentryTreeBuilder.buildBreadCrumbTree(data))
+        return SentryTreeBuilder.buildBreadCrumbTree(data).also {
+            Timber.plant(it)
+        }
     }
 
-    fun sentryEventTree(declaration: TreeDeclaration) {
+    fun sentryEventTree(declaration: TreeDeclaration): Timber.Tree {
         val data = TreeScope()
         declaration(data)
-        Timber.plant(SentryTreeBuilder.buildEventTree(data))
+        return SentryTreeBuilder.buildEventTree(data).also {
+            Timber.plant(it)
+        }
     }
 
-    fun textViewTree(declaration: TextViewTreeDeclaration) {
+    fun textViewTree(declaration: TextViewTreeDeclaration): Timber.Tree {
         val data = TextViewTreeScope()
         declaration(data)
-        Timber.plant(TextViewTreeBuilder.build(data))
+        return TextViewTreeBuilder.build(data).also {
+            Timber.plant(it)
+        }
     }
 }
