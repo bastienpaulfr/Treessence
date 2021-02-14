@@ -1,4 +1,4 @@
-[![Download](https://api.bintray.com/packages/bastienpaulfr/maven/Treessence/images/download.svg) ](https://bintray.com/bastienpaulfr/maven/Treessence/_latestVersion)
+[![Release](https://jitpack.io/v/bastienpaulfr/Treessence.svg)](https://jitpack.io/#bastienpaulfr/Treessence)
 [![Build Status](https://travis-ci.org/bastienpaulfr/Treessence.svg?branch=master)](https://travis-ci.org/bastienpaulfr/Treessence)
 
 # Treessence
@@ -11,13 +11,13 @@ Some trees for Timber lib
 ```
 repositories {
     jcenter()
-    maven { url "https://dl.bintray.com/bastienpaulfr/maven" }
+    maven { url "https://jitpack.io" }
 }
 
 dependencies {
     //Treessence does not include Timber
     implementation 'com.jakewharton.timber:timber:4.7.1'
-    implementation 'fr.bipi.treessence:treessence:0.3.0'
+    implementation 'com.github.bastienpaulfr:Treessence:1.0.0'
 }
 ```
 
