@@ -11,8 +11,18 @@ import fr.bipi.tressence.common.formatter.NoTagFormatter
 open class FormatterPriorityTree @JvmOverloads constructor(
     priority: Int,
     filter: Filter = NoFilter.INSTANCE,
-    val formatter: Formatter = NoTagFormatter.INSTANCE
+    private var _formatter: Formatter = NoTagFormatter.INSTANCE
 ) : PriorityTree(priority, filter) {
+
+    val formatter: Formatter
+        @Synchronized
+        get() = _formatter
+
+    @Deprecated("Method for retro compatibility")
+    @Synchronized
+    fun withFormatter(newFormatter: Formatter) {
+        _formatter = newFormatter
+    }
 
     /**
      * Use its formatter to format log
