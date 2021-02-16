@@ -11,15 +11,18 @@ import timber.log.Timber
 @Suppress("MemberVisibilityCanBePrivate")
 open class PriorityTree @JvmOverloads constructor(
     priority: Int,
-    val filter: Filter = NoFilter.INSTANCE
+    filter: Filter = NoFilter.INSTANCE
 ) : Timber.DebugTree() {
+
     val priorityFilter: PriorityFilter = PriorityFilter(priority)
-    private var _filter:Filter = filter
+    var filter: Filter = filter
+        private set
 
     @Deprecated("Method for retro compatibility")
     @Synchronized
-    fun withFilter(newFilter: Filter) {
-        _filter = newFilter
+    fun withFilter(newFilter: Filter): PriorityTree {
+        filter = newFilter
+        return this
     }
 
     override fun isLoggable(priority: Int): Boolean {
@@ -27,7 +30,7 @@ open class PriorityTree @JvmOverloads constructor(
     }
 
     public override fun isLoggable(tag: String?, priority: Int): Boolean {
-        return priorityFilter.isLoggable(priority, tag) && _filter.isLoggable(priority, tag)
+        return priorityFilter.isLoggable(priority, tag) && filter.isLoggable(priority, tag)
     }
 
     /**
@@ -40,6 +43,6 @@ open class PriorityTree @JvmOverloads constructor(
      * @return true if needed to be skipped or false
      */
     protected fun skipLog(priority: Int, tag: String?, message: String, t: Throwable?): Boolean {
-        return _filter.skipLog(priority, tag, message, t)
+        return filter.skipLog(priority, tag, message, t)
     }
 }

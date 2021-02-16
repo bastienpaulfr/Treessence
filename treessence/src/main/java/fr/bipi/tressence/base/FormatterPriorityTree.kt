@@ -11,15 +11,17 @@ import fr.bipi.tressence.common.formatter.NoTagFormatter
 open class FormatterPriorityTree @JvmOverloads constructor(
     priority: Int,
     filter: Filter = NoFilter.INSTANCE,
-    val formatter: Formatter = NoTagFormatter.INSTANCE
+    formatter: Formatter = NoTagFormatter.INSTANCE
 ) : PriorityTree(priority, filter) {
 
-    private var _formatter = formatter
+    var formatter = formatter
+        private set
 
     @Deprecated("Method for retro compatibility")
     @Synchronized
-    fun withFormatter(newFormatter: Formatter) {
-        _formatter = newFormatter
+    fun withFormatter(newFormatter: Formatter): FormatterPriorityTree {
+        formatter = newFormatter
+        return this
     }
 
     /**
@@ -31,7 +33,7 @@ open class FormatterPriorityTree @JvmOverloads constructor(
      * @return Formatted log
      */
     protected fun format(priority: Int, tag: String?, message: String): String {
-        return _formatter.format(priority, tag, message)
+        return formatter.format(priority, tag, message)
     }
 
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
