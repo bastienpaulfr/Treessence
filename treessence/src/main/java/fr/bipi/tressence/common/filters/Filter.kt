@@ -1,6 +1,5 @@
 package fr.bipi.tressence.common.filters
 
-
 interface Filter {
     /**
      * @param priority Log priority.
@@ -13,5 +12,3 @@ interface Filter {
     fun skipLog(priority: Int, tag: String?, message: String, t: Throwable?): Boolean
     fun isLoggable(priority: Int, tag: String?): Boolean
 }
-
-

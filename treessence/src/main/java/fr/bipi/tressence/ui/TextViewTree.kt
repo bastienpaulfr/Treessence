@@ -10,7 +10,6 @@ import fr.bipi.tressence.common.formatter.Formatter
 import fr.bipi.tressence.common.formatter.NoTagFormatter
 import java.lang.ref.WeakReference
 
-
 /**
  * An implementation of `Timber.Tree` which sends log into a text view
  */

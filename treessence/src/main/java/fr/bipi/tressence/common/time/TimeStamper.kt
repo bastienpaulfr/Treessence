@@ -1,8 +1,9 @@
 package fr.bipi.tressence.common.time
 
 import java.text.SimpleDateFormat
-import java.util.*
-
+import java.util.Date
+import java.util.Locale
+import java.util.TimeZone
 
 class TimeStamper {
     private val dateFormat: SimpleDateFormat

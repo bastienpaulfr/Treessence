@@ -9,8 +9,7 @@ import fr.bipi.tressence.common.formatter.Formatter
 import io.sentry.Sentry
 import io.sentry.event.Breadcrumb
 import io.sentry.event.BreadcrumbBuilder
-import java.util.*
-
+import java.util.Date
 
 /**
  * Logger that will store a Breadcrumb. Throwable are ignored.
@@ -47,5 +46,3 @@ class SentryBreadcrumbTree @JvmOverloads constructor(
         }
     }
 }
-
-

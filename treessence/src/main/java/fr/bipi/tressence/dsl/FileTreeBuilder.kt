@@ -4,7 +4,6 @@ import fr.bipi.tressence.common.filters.mergeFilters
 import fr.bipi.tressence.common.formatter.LogcatFormatter
 import fr.bipi.tressence.file.FileLoggerTree
 
-
 typealias FileTreeDeclaration = FileTreeScope.() -> Unit
 
 class FileTreeScope : TreeScope() {

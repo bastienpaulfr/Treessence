@@ -9,7 +9,6 @@ import fr.bipi.tressence.common.formatter.Formatter
 import fr.bipi.tressence.common.formatter.SimpleFormatter
 import timber.log.Timber
 
-
 typealias TreeDeclaration = TreeScope.() -> Unit
 
 typealias FilterDeclaration = (priority: Int, tag: String?, message: String, t: Throwable?) -> Boolean
@@ -78,9 +77,9 @@ object TreeBuilder {
 
             override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
                 with(data) {
-                    if (priority >= level
-                        && filter.isLoggable(priority, tag)
-                        && !filter.skipLog(priority, tag, message, t)
+                    if (priority >= level &&
+                        filter.isLoggable(priority, tag) &&
+                        !filter.skipLog(priority, tag, message, t)
                     ) {
                         writer(form.format(priority, tag, message), t)
                     }

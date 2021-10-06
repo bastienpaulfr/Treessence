@@ -17,7 +17,6 @@ import org.junit.Test
 import org.junit.rules.TemporaryFolder
 import timber.log.Timber
 
-
 class DslTest {
 
     @Rule
@@ -33,7 +32,6 @@ class DslTest {
 
             tree(
                 { s: String, t: Throwable? ->
-
                 }
             ) {
                 level = Log.INFO
@@ -228,5 +226,4 @@ class DslTest {
 
         Timber.treeCount().`should be equal to`(0)
     }
-
 }

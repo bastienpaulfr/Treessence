@@ -1,6 +1,5 @@
 package fr.bipi.tressence.console
 
-
 import android.util.Log
 import fr.bipi.tressence.base.FormatterPriorityTree
 import fr.bipi.tressence.common.filters.Filter
@@ -8,7 +7,6 @@ import fr.bipi.tressence.common.filters.NoFilter
 import fr.bipi.tressence.common.formatter.Formatter
 import fr.bipi.tressence.common.formatter.LogcatFormatter
 import timber.log.Timber
-
 
 /**
  * An implementation of [Timber.Tree] which log using [System.out] print() method.
@@ -27,5 +25,3 @@ class SystemLogTree @JvmOverloads constructor(
         t?.printStackTrace()
     }
 }
-
-

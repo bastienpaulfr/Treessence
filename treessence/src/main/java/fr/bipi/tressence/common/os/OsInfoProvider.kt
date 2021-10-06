@@ -1,6 +1,5 @@
 package fr.bipi.tressence.common.os
 
-
 interface OsInfoProvider {
     /**
      * Returns the current time in milliseconds.  Note that
@@ -31,4 +30,3 @@ interface OsInfoProvider {
      */
     val currentThreadId: Long
 }
-

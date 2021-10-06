@@ -11,12 +11,10 @@ import fr.bipi.tressence.common.utils.FileUtils
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
-import java.util.*
 import java.util.logging.FileHandler
 import java.util.logging.Level
 import java.util.logging.LogRecord
 import java.util.logging.Logger
-
 
 /**
  * An implementation of `Timber.Tree` which sends log into a circular file.

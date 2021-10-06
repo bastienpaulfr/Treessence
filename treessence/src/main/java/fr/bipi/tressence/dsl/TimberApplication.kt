@@ -33,18 +33,24 @@ object TimberApplication {
     }
 
     fun filterTree(level: Int, filter: (priority: Int, tag: String?, message: String, t: Throwable?) -> Boolean) =
-        PriorityTree(level, object : Filter {
-            override fun isLoggable(priority: Int, tag: String?) = true
+        PriorityTree(
+            level,
+            object : Filter {
+                override fun isLoggable(priority: Int, tag: String?) = true
 
-            override fun skipLog(priority: Int, tag: String?, message: String, t: Throwable?) = filter(priority, tag, message, t)
-        }).also {
+                override fun skipLog(priority: Int, tag: String?, message: String, t: Throwable?) = filter(priority, tag, message, t)
+            }
+        ).also {
             Timber.plant(it)
         }
 
     fun formatterTree(level: Int, formatter: (priority: Int, tag: String?, message: String) -> String) =
-        FormatterPriorityTree(level, formatter = object : Formatter {
-            override fun format(priority: Int, tag: String?, message: String) = formatter(priority, tag, message)
-        }).also {
+        FormatterPriorityTree(
+            level,
+            formatter = object : Formatter {
+                override fun format(priority: Int, tag: String?, message: String) = formatter(priority, tag, message)
+            }
+        ).also {
             Timber.plant(it)
         }
 

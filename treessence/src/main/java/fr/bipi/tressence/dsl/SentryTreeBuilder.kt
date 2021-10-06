@@ -17,7 +17,6 @@ object SentryTreeBuilder {
         )
     }
 
-
     fun buildEventTree(data: TreeScope) = with(data) {
         SentryEventTree(
             priority = level,

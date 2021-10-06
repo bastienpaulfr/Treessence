@@ -1,0 +1,30 @@
+
+configurations {
+    ktlint
+}
+
+// From https://github.com/pinterest/ktlint/blob/master/README.md
+task ktlint(type: JavaExec, group: "verification") {
+    description = "Check Kotlin code style."
+    main = "com.pinterest.ktlint.Main"
+    classpath = configurations.ktlint
+    args "src/**/*.kt", "--reporter=plain", "--reporter=checkstyle,output=${buildDir}/reports/ktlint/ktlint.xml"
+
+    //  --disabled_rules=filename ==> no check of filename
+    // see https://github.com/pinterest/ktlint#usage for more
+}
+
+task ktlintFormat(type: JavaExec, group: "formatting") {
+    description = "Fix Kotlin code style deviations."
+    main = "com.pinterest.ktlint.Main"
+    classpath = configurations.ktlint
+    args "-F", "src/**/*.kt"
+    // Will try to auto-format what is possible
+}
+
+check.dependsOn 'ktlint'
+
+dependencies {
+    // ktlint
+    ktlint "com.pinterest:ktlint:0.41.0"
+}
