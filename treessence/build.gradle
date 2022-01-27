@@ -2,7 +2,6 @@ plugins {
     id "fr.coppernic.versioning" version "3.1.2"
     id 'com.android.library'
     id 'kotlin-android'
-    id 'kotlin-android-extensions'
     id 'kotlin-kapt'
 }
 
@@ -10,7 +9,6 @@ apply from: rootProject.file('gradle/ktlint.gradle')
 
 repositories {
     google()
-    jcenter()
     mavenCentral()
     maven { url 'https://jitpack.io' }
 }
@@ -49,15 +47,15 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
-    implementation 'com.jakewharton.timber:timber:4.7.1'
-    implementation 'org.jetbrains:annotations:16.0.1'
+    implementation 'com.jakewharton.timber:timber:5.0.1'
+    implementation 'org.jetbrains:annotations:20.1.0'
 
     compileOnly 'org.slf4j:slf4j-android:1.7.25'
     compileOnly 'io.sentry:sentry-android:1.7.10'
 
-    testImplementation 'junit:junit:4.13.1'
+    testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.mockito:mockito-core:3.12.4'
-    testImplementation "org.robolectric:robolectric:4.5.1"
+    testImplementation "org.robolectric:robolectric:4.6.1"
     testImplementation "org.awaitility:awaitility:3.0.0"
     testImplementation 'org.amshove.kluent:kluent:1.65'
     testImplementation "org.hamcrest:java-hamcrest:2.0.0.0"

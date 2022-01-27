@@ -150,9 +150,9 @@ class DslTest {
             }.`should be instance of`(TextViewTree::class.java)
         }
 
-        Timber.treeCount().`should be equal to`(10)
+        Timber.treeCount.`should be equal to`(10)
         stopTimber()
-        Timber.treeCount().`should be equal to`(0)
+        Timber.treeCount.`should be equal to`(0)
     }
 
     @Test
@@ -164,12 +164,12 @@ class DslTest {
             }
         }
 
-        Timber.treeCount().`should be equal to`(1)
+        Timber.treeCount.`should be equal to`(1)
         Timber.forest()[0].`should be equal to`(tree)
 
         stopTimber()
 
-        Timber.treeCount().`should be equal to`(0)
+        Timber.treeCount.`should be equal to`(0)
     }
 
     @Test
@@ -181,12 +181,12 @@ class DslTest {
             }
         }
 
-        Timber.treeCount().`should be equal to`(1)
+        Timber.treeCount.`should be equal to`(1)
         Timber.forest()[0].`should be equal to`(tree)
 
         stopTimber()
 
-        Timber.treeCount().`should be equal to`(0)
+        Timber.treeCount.`should be equal to`(0)
     }
 
     @Test
@@ -215,7 +215,7 @@ class DslTest {
             }
         }
 
-        Timber.treeCount().`should be equal to`(1)
+        Timber.treeCount.`should be equal to`(1)
         Timber.forest()[0].`should be equal to`(tree)
 
         Timber.tag("tag").i("message")
@@ -224,6 +224,6 @@ class DslTest {
 
         stopTimber()
 
-        Timber.treeCount().`should be equal to`(0)
+        Timber.treeCount.`should be equal to`(0)
     }
 }

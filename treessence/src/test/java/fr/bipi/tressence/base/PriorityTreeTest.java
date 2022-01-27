@@ -40,7 +40,7 @@ public class PriorityTreeTest extends RobolectricTest {
         tree = new PriorityTree(Log.VERBOSE);
         tree.v("log");
         assertLog()
-            .hasVerboseMessage("NativeMethodAccessorImpl", "log")
+            .hasVerboseMessage("PriorityTreeTest", "log")
             .hasNoMoreMessages();
     }
 

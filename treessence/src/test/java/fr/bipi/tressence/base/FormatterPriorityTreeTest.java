@@ -2,11 +2,9 @@ package fr.bipi.tressence.base;
 
 import android.util.Log;
 
-import org.jetbrains.annotations.NotNull;
 import org.junit.Test;
 
 import fr.bipi.tressence.common.filters.NoFilter;
-import fr.bipi.tressence.common.formatter.Formatter;
 import fr.bipi.tressence.robolectric.RobolectricTest;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -20,16 +18,11 @@ public class FormatterPriorityTreeTest extends RobolectricTest {
     public void test() {
         tree = new FormatterPriorityTree(Log.DEBUG,
                                          NoFilter.Companion.getINSTANCE(),
-                                         new Formatter() {
-                                             @Override
-                                             public String format(int priority, String tag, @NotNull String message) {
-                                                 return "" + priority + ", " + tag + ", " + message;
-                                             }
-                                         });
+                                         (priority, tag, message) -> "" + priority + ", " + tag + ", " + message);
 
         assertThat(tree.format(1, "tag", "message"), is("1, tag, message"));
         tree.d("message");
-        assertLog().hasDebugMessage("NativeMethodAccessorImpl", "3, NativeMethodAccessorImpl, message")
+        assertLog().hasDebugMessage("FormatterPriorityTreeTest", "3, FormatterPriorityTreeTest, message")
             .hasNoMoreMessages();
     }
 }
