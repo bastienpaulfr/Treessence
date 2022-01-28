@@ -3,18 +3,15 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'org.jetbrains.dokka'
 }
 
 apply from: rootProject.file('gradle/ktlint.gradle')
 
-repositories {
-    google()
-    mavenCentral()
-    maven { url 'https://jitpack.io' }
-}
-
 android {
     compileSdkVersion 31
+
+    namespace 'fr.bipi.treessence'
 
     defaultConfig {
         minSdkVersion 17
@@ -45,7 +42,7 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.6.10"
 
     implementation 'com.jakewharton.timber:timber:5.0.1'
     implementation 'org.jetbrains:annotations:20.1.0'

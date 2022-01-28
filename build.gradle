@@ -1,14 +1,8 @@
-buildscript {
-    ext.kotlin_version = '1.6.10'
-    repositories {
-        gradlePluginPortal()
-        google()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:4.2.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.jetbrains.dokka:dokka-android-gradle-plugin:0.9.18"
-    }
+plugins {
+    id 'com.android.application' version '7.1.0' apply false
+    id 'com.android.library' version '7.1.0' apply false
+    id 'org.jetbrains.kotlin.android' version '1.6.10' apply false
+    id 'org.jetbrains.dokka' version '1.6.10' apply false
 }
 
 task clean(type: Delete) {
