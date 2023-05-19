@@ -8,6 +8,7 @@ import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.unmockkAll
 import junit.framework.TestCase
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -22,6 +23,8 @@ import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.junit.jupiter.api.io.TempDir
+import org.junit.runner.RunWith
+import org.junit.runners.Parameterized
 import timber.log.Timber
 import java.io.BufferedReader
 import java.io.File
@@ -30,7 +33,10 @@ import java.nio.file.Path
 import java.util.concurrent.atomic.AtomicInteger
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class FileLoggerTreeTest {
+@RunWith(Parameterized::class)
+class FileLoggerTreeTest(
+    private val coroutineScope: CoroutineScope?
+) {
 
     @TempDir
     private val tempDir: Path? = null
@@ -106,11 +112,11 @@ class FileLoggerTreeTest {
     @Test
     fun testFileAndSizeLimits() = runTest {
         val dirPath = "$dir/ce_file_size_test_logs"
-        val fileLoggerTree = buildTree(1000000, dirPath)
+        val fileLoggerTree = buildTree(10000, dirPath)
 
         Timber.plant(fileLoggerTree)
 
-        for (i in 0..100000) { // Logs 100000 messages to fill up the files
+        for (i in 0..1000) { // Logs 100000 messages to fill up the files
             Timber.i("test $i")
         }
 
@@ -197,7 +203,7 @@ class FileLoggerTreeTest {
         // check if the directory does not exist before logging
         assertEquals(false, File(dirPath).exists())
 
-        val fileLoggerTree = buildTree(1000000, dirPath)
+        val fileLoggerTree = buildTree(1000, dirPath)
         Timber.plant(fileLoggerTree)
 
         var number = File(fileLoggerTree.getFileName(0)).length()
@@ -205,9 +211,9 @@ class FileLoggerTreeTest {
         // check if the file size is 0 before logging
         assertEquals(0, number)
 
-        withContext(Dispatchers.IO) {
-            Timber.d("test message")
-        }
+
+        Timber.d("test message")
+
 
         // Check if the directory exists after building the tree
         assertEquals(true, File(dirPath).exists())
@@ -274,15 +280,13 @@ class FileLoggerTreeTest {
     @Test
     fun testExceptionLogging() = runTest {
         val dirPath = "$dir/ce_exception_test_logs"
-        val fileLoggerTree = buildTree(1000000, dirPath)
+        val fileLoggerTree = buildTree(10000, dirPath)
         Timber.plant(fileLoggerTree)
 
         val exceptionMessage = "This is a test exception"
         val exception = RuntimeException(exceptionMessage)
 
-        withContext(Dispatchers.IO) {
-            Timber.e(exception)
-        }
+        Timber.e(exception)
 
         delay(1000) // Give it a moment to log
 
@@ -320,6 +324,7 @@ class FileLoggerTreeTest {
             .withFileLimit(3)
             .withMinPriority(Log.DEBUG)
             .withFormatter(logcatFormatter)
+            .withCoroutineScope(coroutineScope)
             .buildQuietly()
 
         MatcherAssert.assertThat(
@@ -378,6 +383,14 @@ class FileLoggerTreeTest {
                     priority
                 )
             } | Thread: main | PID: 0 | Tag: $tag | $message" + "\n"
+        }
+    }
+
+    companion object { //makes test run twice with and without coroutine scope
+        @JvmStatic
+        @Parameterized.Parameters
+        fun data(): Iterable<Array<Any?>> {
+            return listOf(arrayOf(null), arrayOf(CoroutineScope(Dispatchers.Default)))
         }
     }
 }

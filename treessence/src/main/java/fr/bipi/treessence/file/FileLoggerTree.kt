@@ -9,8 +9,6 @@ import fr.bipi.treessence.common.formatter.Formatter
 import fr.bipi.treessence.common.formatter.LogcatFormatter
 import fr.bipi.treessence.common.utils.FileUtils
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
@@ -39,22 +37,24 @@ class FileLoggerTree @JvmOverloads constructor(
     private val nbFiles: Int,
     priority: Int,
     filter: Filter = NoFilter.INSTANCE,
-    formatter: Formatter = LogcatFormatter.INSTANCE
+    formatter: Formatter = LogcatFormatter.INSTANCE,
+    private val loggingCoroutineScope: CoroutineScope? = null
 ) : FormatterPriorityTree(priority, filter, formatter) {
 
-    private val loggingScope = CoroutineScope(Dispatchers.IO + Job())
 
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
         if (skipLog(priority, tag, message, t)) return
 
-        loggingScope.launch {
+        val logOperation = {
             runCatching {
                 logger.log(fromPriorityToLevel(priority), format(priority, tag, message))
                 t?.let { logger.log(fromPriorityToLevel(priority), "", it) }
             }.onFailure { e ->
-                Timber.e(e, "Could not write the log message.")
+                logger.log(Level.SEVERE, "Could not write the log message.", e)
             }
         }
+
+        loggingCoroutineScope?.launch { logOperation() } ?: logOperation()
     }
 
     /**
@@ -114,6 +114,7 @@ class FileLoggerTree @JvmOverloads constructor(
         private var appendToFile = true
         private var filter: Filter = NoFilter.INSTANCE
         private var formatter: Formatter = LogcatFormatter.INSTANCE
+        private var loggingCoroutineScope: CoroutineScope? = null
 
         /**
          * Specify a custom file name
@@ -206,6 +207,11 @@ class FileLoggerTree @JvmOverloads constructor(
          */
         fun withFormatter(formatter: Formatter): Builder {
             this.formatter = formatter
+            return this
+        }
+
+        fun withCoroutineScope(loggingCoroutineScope: CoroutineScope?): Builder {
+            this.loggingCoroutineScope = loggingCoroutineScope
             return this
         }
 
