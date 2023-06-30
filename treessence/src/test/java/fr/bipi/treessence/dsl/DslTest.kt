@@ -7,11 +7,10 @@ import fr.bipi.treessence.console.ThrowErrorTree
 import fr.bipi.treessence.context.GlobalContext.startTimber
 import fr.bipi.treessence.context.GlobalContext.stopTimber
 import fr.bipi.treessence.file.FileLoggerTree
-import fr.bipi.treessence.sentry.SentryBreadcrumbTree
-import fr.bipi.treessence.sentry.SentryEventTree
 import fr.bipi.treessence.ui.TextViewTree
 import org.amshove.kluent.`should be equal to`
 import org.amshove.kluent.`should be instance of`
+import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
@@ -22,6 +21,11 @@ class DslTest {
     @Rule
     @JvmField
     val temporaryFolder = TemporaryFolder()
+
+    @Before
+    fun setUp() {
+        Timber.uprootAll()
+    }
 
     @Test
     fun startTimberDsl() {
@@ -106,34 +110,6 @@ class DslTest {
                 }
             }.`should be instance of`(ThrowErrorTree::class.java)
 
-            sentryBreadCrumbTree {
-                level = Log.INFO
-
-                filter(NoFilter())
-
-                filter { prio, tag, m, t ->
-                    false
-                }
-
-                formatter { prio, tag, message ->
-                    ""
-                }
-            }.`should be instance of`(SentryBreadcrumbTree::class.java)
-
-            sentryEventTree {
-                level = Log.INFO
-
-                filter(NoFilter())
-
-                filter { prio, tag, m, t ->
-                    false
-                }
-
-                formatter { prio, tag, message ->
-                    ""
-                }
-            }.`should be instance of`(SentryEventTree::class.java)
-
             textViewTree {
                 level = Log.INFO
                 append = true
@@ -150,7 +126,7 @@ class DslTest {
             }.`should be instance of`(TextViewTree::class.java)
         }
 
-        Timber.treeCount.`should be equal to`(10)
+        Timber.treeCount.`should be equal to`(8)
         stopTimber()
         Timber.treeCount.`should be equal to`(0)
     }

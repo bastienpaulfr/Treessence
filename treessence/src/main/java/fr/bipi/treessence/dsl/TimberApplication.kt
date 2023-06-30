@@ -115,22 +115,6 @@ object TimberApplication {
         }
     }
 
-    fun sentryBreadCrumbTree(declaration: TreeDeclaration) = with(declaration) {
-        val data = TreeScope()
-        this(data)
-        SentryTreeBuilder.buildBreadCrumbTree(data).also {
-            Timber.plant(it)
-        }
-    }
-
-    fun sentryEventTree(declaration: TreeDeclaration) = with(declaration) {
-        val data = TreeScope()
-        this(data)
-        SentryTreeBuilder.buildEventTree(data).also {
-            Timber.plant(it)
-        }
-    }
-
     fun textViewTree(declaration: TextViewTreeDeclaration) = with(declaration) {
         val data = TextViewTreeScope()
         this(data)

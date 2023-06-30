@@ -48,7 +48,6 @@ dependencies {
     implementation 'org.jetbrains:annotations:20.1.0'
 
     compileOnly 'org.slf4j:slf4j-android:1.7.25'
-    compileOnly 'io.sentry:sentry-android:1.7.10'
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.mockito:mockito-core:3.12.4'
