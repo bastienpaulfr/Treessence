@@ -14,7 +14,7 @@ import timber.log.Timber
 class SystemLogTree @JvmOverloads constructor(
     priority: Int = Log.VERBOSE,
     filter: Filter = NoFilter.INSTANCE,
-    formatter: Formatter = LogcatFormatter.INSTANCE
+    formatter: Formatter = LogcatFormatter.INSTANCE,
 ) : FormatterPriorityTree(priority, filter, formatter) {
 
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {

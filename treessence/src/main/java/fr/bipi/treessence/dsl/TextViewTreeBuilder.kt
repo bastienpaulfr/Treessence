@@ -21,7 +21,7 @@ object TextViewTreeBuilder {
             priority = level,
             filter = filters.mergeFilters(),
             formatter = formatter ?: LogcatFormatter.INSTANCE,
-            append
+            append,
         ).apply {
             setTextView(textView)
         }

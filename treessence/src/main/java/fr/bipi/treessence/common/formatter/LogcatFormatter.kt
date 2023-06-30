@@ -12,7 +12,7 @@ class LogcatFormatter : Formatter {
         Log.INFO to "I/",
         Log.WARN to "W/",
         Log.ERROR to "E/",
-        Log.ASSERT to "WTF/"
+        Log.ASSERT to "WTF/",
     )
     var timeStamper = TimeStamper("MM-dd HH:mm:ss:SSS")
     var osInfoProvider: OsInfoProvider = OsInfoProviderDefault()

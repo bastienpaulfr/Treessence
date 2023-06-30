@@ -32,24 +32,38 @@ object TimberApplication {
         Timber.plant(it)
     }
 
-    fun filterTree(level: Int, filter: (priority: Int, tag: String?, message: String, t: Throwable?) -> Boolean) =
+    fun filterTree(
+        level: Int,
+        filter: (priority: Int, tag: String?, message: String, t: Throwable?) -> Boolean,
+    ) =
         PriorityTree(
             level,
             object : Filter {
                 override fun isLoggable(priority: Int, tag: String?) = true
-
-                override fun skipLog(priority: Int, tag: String?, message: String, t: Throwable?) = filter(priority, tag, message, t)
-            }
+                override fun skipLog(
+                    priority: Int,
+                    tag: String?,
+                    message: String,
+                    t: Throwable?,
+                ) = filter(priority, tag, message, t)
+            },
         ).also {
             Timber.plant(it)
         }
 
-    fun formatterTree(level: Int, formatter: (priority: Int, tag: String?, message: String) -> String) =
+    fun formatterTree(
+        level: Int,
+        formatter: (priority: Int, tag: String?, message: String) -> String,
+    ) =
         FormatterPriorityTree(
             level,
             formatter = object : Formatter {
-                override fun format(priority: Int, tag: String?, message: String) = formatter(priority, tag, message)
-            }
+                override fun format(
+                    priority: Int,
+                    tag: String?,
+                    message: String,
+                ) = formatter(priority, tag, message)
+            },
         ).also {
             Timber.plant(it)
         }
@@ -57,24 +71,26 @@ object TimberApplication {
     fun filterAndFormatterTree(
         level: Int,
         filter: (priority: Int, tag: String?, message: String, t: Throwable?) -> Boolean,
-        formatter: (priority: Int, tag: String?, message: String) -> String
+        formatter: (priority: Int, tag: String?, message: String) -> String,
     ) = FormatterPriorityTree(
         level,
         filter = object : Filter {
             override fun isLoggable(priority: Int, tag: String?) = true
 
-            override fun skipLog(priority: Int, tag: String?, message: String, t: Throwable?) = filter(priority, tag, message, t)
+            override fun skipLog(priority: Int, tag: String?, message: String, t: Throwable?) =
+                filter(priority, tag, message, t)
         },
         formatter = object : Formatter {
-            override fun format(priority: Int, tag: String?, message: String) = formatter(priority, tag, message)
-        }
+            override fun format(priority: Int, tag: String?, message: String) =
+                formatter(priority, tag, message)
+        },
     ).also {
         Timber.plant(it)
     }
 
     fun tree(
         writer: Writer,
-        declaration: TreeDeclaration
+        declaration: TreeDeclaration,
     ) = with(declaration) {
         val data = TreeScope()
         this(data)

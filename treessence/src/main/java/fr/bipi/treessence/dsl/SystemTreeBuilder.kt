@@ -12,7 +12,7 @@ object SystemTreeBuilder {
         SystemLogTree(
             priority = level,
             filter = filters.mergeFilters(),
-            formatter = formatter ?: LogcatFormatter.INSTANCE
+            formatter = formatter ?: LogcatFormatter.INSTANCE,
         )
     }
 }

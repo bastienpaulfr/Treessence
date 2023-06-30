@@ -7,7 +7,7 @@ package fr.bipi.treessence.common.filters
  * - If one of filter tells that it is not loggable, then this merge filter is not loggable as well.
  */
 class MergeFilter(
-    filters: List<Filter> = emptyList()
+    filters: List<Filter> = emptyList(),
 ) : Filter {
     val filters = mutableListOf<Filter>().apply {
         addAll(filters)

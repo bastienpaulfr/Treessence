@@ -36,7 +36,7 @@ class DslTest {
 
             tree(
                 { s: String, t: Throwable? ->
-                }
+                },
             ) {
                 level = Log.INFO
 
@@ -173,7 +173,7 @@ class DslTest {
             tree(
                 { s: String, t: Throwable? ->
                     sb.append("$s:$t\n")
-                }
+                },
             ) {
                 level = Log.INFO
 

@@ -1,7 +1,7 @@
 package fr.bipi.treessence.common.filters
 
-import org.amshove.kluent.`should be instance of`
 import org.amshove.kluent.`should be`
+import org.amshove.kluent.`should be instance of`
 import org.amshove.kluent.`should contain same`
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -12,17 +12,20 @@ class MergeFilterTest {
 
     private lateinit var filters: MutableList<Filter>
     private val accept = object : Filter {
-        override fun skipLog(priority: Int, tag: String?, message: String, t: Throwable?): Boolean = false
+        override fun skipLog(priority: Int, tag: String?, message: String, t: Throwable?): Boolean =
+            false
+
         override fun isLoggable(priority: Int, tag: String?): Boolean = true
     }
     private val deny = object : Filter {
-        override fun skipLog(priority: Int, tag: String?, message: String, t: Throwable?): Boolean = true
+        override fun skipLog(priority: Int, tag: String?, message: String, t: Throwable?): Boolean =
+            true
+
         override fun isLoggable(priority: Int, tag: String?): Boolean = false
     }
 
     @Before
     fun setUp() {
-
         filters = mutableListOf(accept, accept, accept, deny)
     }
 

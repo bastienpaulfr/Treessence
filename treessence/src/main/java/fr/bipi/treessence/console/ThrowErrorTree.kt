@@ -13,7 +13,7 @@ import fr.bipi.treessence.common.filters.NoFilter
  */
 class ThrowErrorTree @JvmOverloads constructor(
     priority: Int = Log.ERROR,
-    filter: Filter = NoFilter.INSTANCE
+    filter: Filter = NoFilter.INSTANCE,
 ) : PriorityTree(priority, filter) {
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
         if (skipLog(priority, tag, message, t)) {

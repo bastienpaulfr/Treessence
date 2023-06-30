@@ -26,5 +26,5 @@ check.dependsOn 'ktlint'
 
 dependencies {
     // ktlint
-    ktlint "com.pinterest:ktlint:0.41.0"
+    ktlint "com.pinterest:ktlint:0.50.0"
 }

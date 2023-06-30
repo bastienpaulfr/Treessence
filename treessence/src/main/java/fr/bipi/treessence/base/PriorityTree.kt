@@ -11,7 +11,7 @@ import timber.log.Timber
 @Suppress("MemberVisibilityCanBePrivate")
 open class PriorityTree @JvmOverloads constructor(
     priority: Int,
-    filter: Filter = NoFilter.INSTANCE
+    filter: Filter = NoFilter.INSTANCE,
 ) : Timber.DebugTree() {
 
     val priorityFilter: PriorityFilter = PriorityFilter(priority)
@@ -27,7 +27,7 @@ open class PriorityTree @JvmOverloads constructor(
 
     @Deprecated(
         "Use isLoggable(String, int)",
-        replaceWith = ReplaceWith("this.isLoggable(null, priority)")
+        replaceWith = ReplaceWith("this.isLoggable(null, priority)"),
     )
     override fun isLoggable(priority: Int): Boolean {
         return isLoggable("", priority)

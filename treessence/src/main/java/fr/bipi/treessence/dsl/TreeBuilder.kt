@@ -69,7 +69,7 @@ object TreeBuilder {
      */
     fun buildTree(
         writer: Writer,
-        data: TreeScope
+        data: TreeScope,
     ): Timber.Tree {
         return object : Timber.Tree() {
             val filter = data.filters.mergeFilters()

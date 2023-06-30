@@ -9,7 +9,7 @@ class DefaultLogFormatter private constructor() : Formatter {
         Log.INFO to "I/",
         Log.WARN to "W/",
         Log.ERROR to "E/",
-        Log.ASSERT to "WTF/"
+        Log.ASSERT to "WTF/",
     )
 
     override fun format(priority: Int, tag: String?, message: String) = "${priorities[priority] ?: ""}${"${tag ?: ""} : "}${message}\n"

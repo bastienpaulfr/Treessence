@@ -10,7 +10,7 @@ object ThrowErrorTreeBuilder {
     fun build(data: TreeScope) = with(data) {
         ThrowErrorTree(
             priority = level,
-            filter = filters.mergeFilters()
+            filter = filters.mergeFilters(),
         )
     }
 }

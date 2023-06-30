@@ -11,7 +11,7 @@ import fr.bipi.treessence.common.formatter.NoTagFormatter
 open class FormatterPriorityTree @JvmOverloads constructor(
     priority: Int,
     filter: Filter = NoFilter.INSTANCE,
-    formatter: Formatter = NoTagFormatter.INSTANCE
+    formatter: Formatter = NoTagFormatter.INSTANCE,
 ) : PriorityTree(priority, filter) {
 
     var formatter = formatter

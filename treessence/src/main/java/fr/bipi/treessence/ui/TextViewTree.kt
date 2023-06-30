@@ -17,10 +17,11 @@ class TextViewTree @JvmOverloads constructor(
     priority: Int,
     filter: Filter = NoFilter.INSTANCE,
     formatter: Formatter = NoTagFormatter.INSTANCE,
-    private val append: Boolean = true
+    private val append: Boolean = true,
 ) : FormatterPriorityTree(
-    priority, filter,
-    formatter
+    priority,
+    filter,
+    formatter,
 ) {
     private val handler = UiHandler()
     private var textViewWeakReference = WeakReference<TextView?>(null)

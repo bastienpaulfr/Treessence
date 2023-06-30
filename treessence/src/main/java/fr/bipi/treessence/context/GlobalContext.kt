@@ -7,7 +7,7 @@ import timber.log.Timber
 object GlobalContext : TimberContext {
 
     fun startTimber(
-        timberDeclaration: TimberDeclaration
+        timberDeclaration: TimberDeclaration,
     ): TimberApplication = synchronized(this) {
         val application = TimberApplication
         timberDeclaration(application)
