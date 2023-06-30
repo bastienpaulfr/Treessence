@@ -10,14 +10,13 @@ Some trees for Timber lib
 
 ```
 repositories {
-    jcenter()
     maven { url "https://jitpack.io" }
 }
 
 dependencies {
     //Treessence does not include Timber
-    implementation 'com.jakewharton.timber:timber:4.7.1'
-    implementation 'com.github.bastienpaulfr:Treessence:1.0.0'
+    implementation 'com.jakewharton.timber:timber:5.0.1'
+    implementation 'com.github.bastienpaulfr:Treessence:1.0.5'
 }
 ```
 
