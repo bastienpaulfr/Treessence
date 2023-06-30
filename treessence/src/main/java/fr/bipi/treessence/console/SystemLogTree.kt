@@ -11,7 +11,7 @@ import timber.log.Timber
 /**
  * An implementation of [Timber.Tree] which log using [System.out] print() method.
  */
-class SystemLogTree @JvmOverloads constructor(
+open class SystemLogTree @JvmOverloads constructor(
     priority: Int = Log.VERBOSE,
     filter: Filter = NoFilter.INSTANCE,
     formatter: Formatter = LogcatFormatter.INSTANCE,

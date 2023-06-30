@@ -13,7 +13,7 @@ import java.lang.ref.WeakReference
 /**
  * An implementation of `Timber.Tree` which sends log into a text view
  */
-class TextViewTree @JvmOverloads constructor(
+open class TextViewTree @JvmOverloads constructor(
     priority: Int,
     filter: Filter = NoFilter.INSTANCE,
     formatter: Formatter = NoTagFormatter.INSTANCE,

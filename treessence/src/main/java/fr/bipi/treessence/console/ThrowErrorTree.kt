@@ -11,7 +11,7 @@ import fr.bipi.treessence.common.filters.NoFilter
  *
  * @param priority Minimum log priority to throw error. Expects one of constants defined in [Log].
  */
-class ThrowErrorTree @JvmOverloads constructor(
+open class ThrowErrorTree @JvmOverloads constructor(
     priority: Int = Log.ERROR,
     filter: Filter = NoFilter.INSTANCE,
 ) : PriorityTree(priority, filter) {

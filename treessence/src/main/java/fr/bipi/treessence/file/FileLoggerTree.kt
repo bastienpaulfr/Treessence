@@ -30,7 +30,7 @@ import java.util.logging.Logger
  * @param nbFiles     Max number of files
  */
 @Suppress("unused")
-class FileLoggerTree @JvmOverloads constructor(
+open class FileLoggerTree @JvmOverloads constructor(
     private val logger: Logger,
     private val fileHandler: FileHandler?,
     private val path: String,
