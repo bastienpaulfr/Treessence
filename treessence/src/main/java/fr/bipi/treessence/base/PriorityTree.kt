@@ -25,6 +25,10 @@ open class PriorityTree @JvmOverloads constructor(
         return this
     }
 
+    @Deprecated(
+        "Use isLoggable(String, int)",
+        replaceWith = ReplaceWith("this.isLoggable(null, priority)")
+    )
     override fun isLoggable(priority: Int): Boolean {
         return isLoggable("", priority)
     }
