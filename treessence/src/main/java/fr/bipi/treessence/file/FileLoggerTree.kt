@@ -8,6 +8,8 @@ import fr.bipi.treessence.common.filters.NoFilter
 import fr.bipi.treessence.common.formatter.Formatter
 import fr.bipi.treessence.common.formatter.LogcatFormatter
 import fr.bipi.treessence.common.utils.FileUtils
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.io.File
 import java.io.IOException
@@ -36,16 +38,20 @@ class FileLoggerTree @JvmOverloads constructor(
     priority: Int,
     filter: Filter = NoFilter.INSTANCE,
     formatter: Formatter = LogcatFormatter.INSTANCE,
+    private val loggingCoroutineScope: CoroutineScope? = null,
 ) : FormatterPriorityTree(priority, filter, formatter) {
 
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
-        if (skipLog(priority, tag, message, t)) {
-            return
+        if (skipLog(priority, tag, message, t)) return
+
+        val logOperation = {
+            runCatching {
+                logger.log(fromPriorityToLevel(priority), format(priority, tag, message))
+                t?.let { logger.log(fromPriorityToLevel(priority), "", it) }
+            }
         }
-        logger.log(fromPriorityToLevel(priority), format(priority, tag, message))
-        if (t != null) {
-            logger.log(fromPriorityToLevel(priority), "", t)
-        }
+
+        loggingCoroutineScope?.launch { logOperation() } ?: logOperation()
     }
 
     /**
@@ -53,12 +59,15 @@ class FileLoggerTree @JvmOverloads constructor(
      */
     fun clear() {
         fileHandler?.close()
-        for (i in 0 until nbFiles) {
-            val f = File(getFileName(i))
-            if (f.exists() && f.isFile) {
-                f.delete()
+
+        (0 until nbFiles)
+            .map { File(getFileName(it)) }
+            .filter { it.exists() && it.isFile }
+            .forEach {
+                if (!it.delete()) {
+                    logger.log(Level.SEVERE, "Could not delete file ${it.absolutePath}")
+                }
             }
-        }
     }
 
     /**
@@ -67,11 +76,13 @@ class FileLoggerTree @JvmOverloads constructor(
      * @param i Number of file
      * @return Real file name
      */
-    fun getFileName(i: Int): String {
-        return if (!this.path.contains("%g")) {
-            this.path + "." + i
+    fun getFileName(index: Int): String {
+        val placeholder = "%g"
+
+        return if (!path.contains(placeholder)) {
+            "$path.$index"
         } else {
-            this.path.replace("%g", "" + i)
+            path.replace(placeholder, index.toString())
         }
     }
 
@@ -79,16 +90,7 @@ class FileLoggerTree @JvmOverloads constructor(
      * @return All files created by the logger
      */
     val files: Collection<File>
-        get() {
-            val col: MutableCollection<File> = ArrayList(nbFiles)
-            for (i in 0 until nbFiles) {
-                val f = File(getFileName(i))
-                if (f.exists()) {
-                    col.add(f)
-                }
-            }
-            return col
-        }
+        get() = (0 until nbFiles).map { File(getFileName(it)) }.filter { it.exists() }
 
     private fun fromPriorityToLevel(priority: Int): Level {
         return when (priority) {
@@ -111,6 +113,7 @@ class FileLoggerTree @JvmOverloads constructor(
         private var appendToFile = true
         private var filter: Filter = NoFilter.INSTANCE
         private var formatter: Formatter = LogcatFormatter.INSTANCE
+        private var loggingCoroutineScope: CoroutineScope? = null
 
         /**
          * Specify a custom file name
@@ -206,6 +209,11 @@ class FileLoggerTree @JvmOverloads constructor(
             return this
         }
 
+        fun withCoroutineScope(loggingCoroutineScope: CoroutineScope?): Builder {
+            this.loggingCoroutineScope = loggingCoroutineScope
+            return this
+        }
+
         /**
          * Specify an option for [FileHandler] creation
          *
@@ -225,7 +233,6 @@ class FileLoggerTree @JvmOverloads constructor(
          */
         @Throws(IOException::class)
         fun build(): FileLoggerTree {
-            // 1st create dir if it does not exists
             File(dir).apply {
                 if (!isDirectory) {
                     mkdirs()
@@ -233,16 +240,21 @@ class FileLoggerTree @JvmOverloads constructor(
             }
 
             val path = FileUtils.combinePath(dir, fileName)
-            val fileHandler: FileHandler
-            val logger = MyLogger.getLogger(TAG)
-            logger.level = Level.ALL
-            if (logger.handlers.isEmpty()) {
-                fileHandler = FileHandler(path, sizeLimit, fileLimit, appendToFile)
-                fileHandler.formatter = NoFormatter()
-                logger.addHandler(fileHandler)
-            } else {
-                fileHandler = logger.handlers[0] as FileHandler
+
+            val logger = MyLogger.getLogger(TAG).apply {
+                level = Level.ALL
             }
+
+            val fileHandler = logger.handlers.firstOrNull() as? FileHandler ?: FileHandler(
+                path,
+                sizeLimit,
+                fileLimit,
+                appendToFile,
+            ).apply {
+                formatter = NoFormatter()
+                logger.addHandler(this)
+            }
+
             return FileLoggerTree(logger, fileHandler, path, fileLimit, priority, filter, formatter)
         }
 
