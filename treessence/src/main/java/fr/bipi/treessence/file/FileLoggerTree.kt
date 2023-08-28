@@ -255,7 +255,7 @@ open class FileLoggerTree @JvmOverloads constructor(
                 logger.addHandler(this)
             }
 
-            return FileLoggerTree(logger, fileHandler, path, fileLimit, priority, filter, formatter)
+            return FileLoggerTree(logger, fileHandler, path, fileLimit, priority, filter, formatter, loggingCoroutineScope)
         }
 
         /**
