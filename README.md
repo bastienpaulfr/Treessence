@@ -16,7 +16,7 @@ repositories {
 dependencies {
     //Treessence does not include Timber
     implementation 'com.jakewharton.timber:timber:5.0.1'
-    implementation 'com.github.bastienpaulfr:Treessence:1.0.5'
+    implementation 'com.github.bastienpaulfr:Treessence:1.1.1'
 }
 ```
 
@@ -64,38 +64,6 @@ Tree t = new FileLoggerTree.Builder()
                      .appendToFile(true)
                      .build();
 Timber.plant(t);
-```
-
-### Crash reporting
-
-#### SentryBreadcrumbTree
-
-An implementation of `Timber.Tree` which stores breadcrumb to Sentry instance. Breadcrumbs are then sent with an event.
-
-You need to add sentry dependency to use this tree.
-
-```java
-Timber.plant(new SentryBreadcrumbTree(Log.DEBUG));
-```
-
-#### SentryEventTree
-
-An implementation of `Timber.Tree` which sends Sentry events. It is useful for sending errors or logs that are not coming so often.
-Otherwise your sentry instance will be flooded !
-
-You need to add sentry dependency to use this tree.
-
-```java
-Timber.plant(new SentryEventTree(Log.ERROR));
-```
-
-You can also add a filter for SentryEvent
-
-```java
-// This will send an event to Sentry only if priority exceeds "ERROR" level and class name starts with "Sentry"
-TagFilter filter = new TagFilter("Sentry.*");
-SentryEventTree tree = new SentryEventTree(Log.INFO, filter);
-Timber.plant(tree);
 ```
 
 ### Custom formatting
