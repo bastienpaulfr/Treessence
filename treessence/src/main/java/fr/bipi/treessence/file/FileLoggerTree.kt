@@ -44,15 +44,16 @@ open class FileLoggerTree @JvmOverloads constructor(
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
         if (skipLog(priority, tag, message, t)) return
 
-        val logOperation = {
-            runCatching {
-                logger.log(fromPriorityToLevel(priority), format(priority, tag, message))
-                t?.let { logger.log(fromPriorityToLevel(priority), "", it) }
-            }
-        }
-
-        loggingCoroutineScope?.launch { logOperation() } ?: logOperation()
+        loggingCoroutineScope?.launch {
+            writeLog(priority, tag, message, t)
+        } ?: writeLog(priority, tag, message, t)
     }
+
+    private fun writeLog(priority: Int, tag: String?, message: String, t: Throwable?) =
+        runCatching {
+            logger.log(fromPriorityToLevel(priority), format(priority, tag, message))
+            t?.let { logger.log(fromPriorityToLevel(priority), "", it) }
+        }
 
     /**
      * Delete all log files
@@ -255,7 +256,16 @@ open class FileLoggerTree @JvmOverloads constructor(
                 logger.addHandler(this)
             }
 
-            return FileLoggerTree(logger, fileHandler, path, fileLimit, priority, filter, formatter, loggingCoroutineScope)
+            return FileLoggerTree(
+                logger,
+                fileHandler,
+                path,
+                fileLimit,
+                priority,
+                filter,
+                formatter,
+                loggingCoroutineScope,
+            )
         }
 
         /**

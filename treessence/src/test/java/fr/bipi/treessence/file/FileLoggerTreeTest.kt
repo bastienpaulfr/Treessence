@@ -20,8 +20,6 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TemporaryFolder
-import org.junit.runner.RunWith
-import org.junit.runners.Parameterized
 import timber.log.Timber
 import java.io.BufferedReader
 import java.io.File
@@ -29,10 +27,7 @@ import java.io.FileReader
 import java.util.concurrent.atomic.AtomicInteger
 
 @ExperimentalCoroutinesApi
-@RunWith(Parameterized::class)
-class FileLoggerTreeTest(
-    private val coroutineScope: CoroutineScope?,
-) {
+class FileLoggerTreeTest {
     @Rule
     @JvmField
     val folder: TemporaryFolder = TemporaryFolder()
@@ -41,12 +36,12 @@ class FileLoggerTreeTest(
     private lateinit var logcatFormatter: LogcatFormatter
 
     private val logId = AtomicInteger(0)
-    private lateinit var dir: String
+    private lateinit var dirPath: String
 
     @Before
     fun setup() {
         MockKAnnotations.init(this, relaxUnitFun = true)
-        dir = folder.toString()
+        dirPath = folder.newFolder().absolutePath
         setupDefaultMocks()
         Timber.uprootAll()
     }
@@ -54,13 +49,12 @@ class FileLoggerTreeTest(
     @After
     fun teardown() {
         unmockkAll()
-        File(dir).deleteRecursively()
         Timber.uprootAll()
     }
 
     @Test
     fun testBasicFileLogging() {
-        val dirPath = "$dir/basic_test_logs"
+        val dirPath = "$dirPath/basic_test_logs"
         val fileLoggerTree = buildTree(1000, dirPath)
 
         Timber.plant(fileLoggerTree)
@@ -93,7 +87,7 @@ class FileLoggerTreeTest(
 
     @Test
     fun testFileAndSizeLimits() {
-        val dirPath = "$dir/file_size_test_logs"
+        val dirPath = "$dirPath/file_size_test_logs"
         val fileLoggerTree = buildTree(10000, dirPath)
         var file: File
 
@@ -124,7 +118,7 @@ class FileLoggerTreeTest(
 
     @Test
     fun testFileLogRotation() {
-        val dirPath = "$dir/log_rotation_test_logs"
+        val dirPath = "$dirPath/log_rotation_test_logs"
         val sizeLimit = 1000 // size limit of each log file in bytes
         val fileLoggerTree = buildTree(sizeLimit, dirPath)
         var file: File
@@ -148,6 +142,7 @@ class FileLoggerTreeTest(
         assertThat(file.readText().contains("log_rotation_test"), `is`(true))
 
         // Log enough messages to rotate the "log_rotation_test" message out of the log files
+
         for (i in 0 until 10000) {
             Timber.i("filler_logs $i")
         }
@@ -170,7 +165,7 @@ class FileLoggerTreeTest(
 
     @Test
     fun testDirectoryCreationIfNonExistent() {
-        val dirPath = "$dir/directory_creation_test_logs"
+        val dirPath = "$dirPath/directory_creation_test_logs"
         val file: File
 
         // check if the directory does not exist before logging
@@ -206,9 +201,14 @@ class FileLoggerTreeTest(
     @Test
     @Suppress("BlockingMethodInNonBlockingContext")
     fun testMultithreadedLogging() = runTest {
-        val dirPath = "$dir/multithreaded_test_logs"
+        val dirPath = "$dirPath/multithreaded_test_logs"
         val threadCount = 100 // increase size of files to increase this number
-        val fileLoggerTree = buildTree(15000, dirPath)
+        val fileLoggerTree = buildTree(
+            fileSize = 15000,
+            dirPath = dirPath,
+            coroutineScope = CoroutineScope(Dispatchers.Default),
+        )
+
         Timber.plant(fileLoggerTree)
 
         val jobList = mutableListOf<Job>()
@@ -241,7 +241,7 @@ class FileLoggerTreeTest(
 
     @Test
     fun testExceptionLogging() {
-        val dirPath = "$dir/exception_test_logs"
+        val dirPath = "$dirPath/exception_test_logs"
         val fileLoggerTree = buildTree(10000, dirPath)
         Timber.plant(fileLoggerTree)
 
@@ -276,7 +276,11 @@ class FileLoggerTreeTest(
         }
     }
 
-    private fun buildTree(fileSize: Int, dirPath: String): FileLoggerTree {
+    private fun buildTree(
+        fileSize: Int,
+        dirPath: String,
+        coroutineScope: CoroutineScope? = null,
+    ): FileLoggerTree {
         val fileLoggerTree = FileLoggerTree.Builder()
             .withDirName(dirPath)
             .withFileName("log.%g")
@@ -338,15 +342,6 @@ class FileLoggerTreeTest(
                     priority,
                 )
             } | Thread: main | PID: 0 | Tag: $tag | $message" + "\n"
-        }
-    }
-
-    companion object {
-        // makes test run twice with and without coroutine scope
-        @JvmStatic
-        @Parameterized.Parameters
-        fun data(): Iterable<Array<Any?>> {
-            return listOf(arrayOf(null), arrayOf(CoroutineScope(Dispatchers.Default)))
         }
     }
 }
