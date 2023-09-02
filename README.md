@@ -16,7 +16,7 @@ repositories {
 dependencies {
     //Treessence does not include Timber
     implementation 'com.jakewharton.timber:timber:5.0.1'
-    implementation 'com.github.bastienpaulfr:Treessence:1.1.1'
+    implementation 'com.github.bastienpaulfr:Treessence:1.1.2'
 }
 ```
 
