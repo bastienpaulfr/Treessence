@@ -1,4 +1,3 @@
-import com.vanniktech.maven.publish.JavadocJar
 import com.vanniktech.maven.publish.AndroidSingleVariantLibrary
 import com.vanniktech.maven.publish.SonatypeHost
 
@@ -8,6 +7,7 @@ plugins {
     alias(libs.plugins.dokka)
     alias(libs.plugins.versioning)
     alias(libs.plugins.maven.publish)
+    id("signing")
 }
 
 apply(rootProject.file("gradle/ktlint.gradle.kts"))
@@ -102,7 +102,7 @@ mavenPublishing {
             }
             developer {
                 id.set("bastienpaulfr")
-                name.set("bastienpaulfr")
+                name.set("Bastien Paul")
                 url.set("https://github.com/bastienpaulfr/")
             }
         }
