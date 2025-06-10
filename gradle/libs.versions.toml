@@ -1,0 +1,49 @@
+[versions]
+agp = "8.10.1"
+kotlin = "2.1.21"
+mavenPublishGradlePlugin = "0.31.0"
+kotlin-coroutines = "1.10.2"
+dokka = "1.8.20"
+timber = "5.0.1"
+annotations = "23.0.0"
+slf4j = "1.7.25"
+
+junit = "4.13.2"
+mockito = "5.12.0"
+roboelectric = "4.14.1"
+awaitility = "3.0.0"
+kluent = "1.65"
+hamcrest = "2.0.0.0"
+mockk = "1.12.0"
+android-runner = "1.6.2"
+versioning = "3.1.2"
+ktlint = "0.50.0"
+
+
+
+[libraries]
+kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
+kotlin-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
+timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+annotations = { module = "org.jetbrains:annotations", version.ref = "annotations" }
+slf4j = { module = "org.slf4j:slf4j-android", version.ref = "slf4j" }
+
+junit = { module = "junit:junit", version.ref = "junit" }
+mockito = { module = "org.mockito:mockito-core", version.ref = "mockito" }
+roboelectric = { module = "org.robolectric:robolectric", version.ref = "roboelectric" }
+awaitility = { module = "org.awaitility:awaitility", version.ref = "awaitility" }
+kluent = { module = "org.amshove.kluent:kluent", version.ref = "kluent" }
+hamcrest = { module = "org.hamcrest:java-hamcrest", version.ref = "hamcrest" }
+mockk = { module = "io.mockk:mock", version.ref = "mockk" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
+kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlin-coroutines" }
+android-runner = { module = "androidx.test:runner", version.ref = "android-runner" }
+
+ktlint = { module = "com.pinterest:ktlint", version.ref = "ktlint" }
+
+[plugins]
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
+androidKotlin = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+versioning = { id = "fr.coppernic.versioning", version.ref = "versioning" }
+maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "mavenPublishGradlePlugin" }
