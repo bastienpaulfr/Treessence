@@ -1,3 +1,6 @@
+# ⚠️  Project not actively maintainted ⚠️
+
+
 [![Release](https://jitpack.io/v/bastienpaulfr/Treessence.svg)](https://jitpack.io/#bastienpaulfr/Treessence)
 [![Build Status](https://travis-ci.org/bastienpaulfr/Treessence.svg?branch=master)](https://travis-ci.org/bastienpaulfr/Treessence)
 
